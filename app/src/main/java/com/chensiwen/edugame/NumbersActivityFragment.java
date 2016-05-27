@@ -9,8 +9,8 @@ import android.view.ViewGroup;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class NumbersActivityFragment extends Fragment {
-
+public class NumbersActivityFragment extends BaseFragment {
+    private static final String TAG = "NumbersActivityFragment";
     public NumbersActivityFragment() {
     }
 
@@ -18,5 +18,10 @@ public class NumbersActivityFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_numbers, container, false);
+    }
+
+    @Override
+    protected String getUmengTag() {
+        return TAG;
     }
 }
