@@ -1,0 +1,33 @@
+*.iml
+.gradle
+/local.properties
+/.idea/workspace.xml
+/.idea/libraries
+.DS_Store
+/build
+/captures
+bin/
+gen/
+.classpath
+.project
+local.properties
+.ant-targets-build.xml
+.settings/
+obj/
+.cproject
+libs/*.properties
+*.class
+tests/bin/*
+tests/gen/*
+.DS_Store
+
+# Gradle files
+.gradle/
+build/
+
+# Android Studio files
+.idea/
+*.iml
+
+# jni obj files
+jni/*/obj/*
