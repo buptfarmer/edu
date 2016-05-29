@@ -8,4 +8,4 @@ for basic config and modules, such as Umeng statics, baidu TTS, animation effect
 # branch dev
 for develop new feature, 
 
-# test contribution
+test commit id hook
