@@ -25,5 +25,5 @@ dependencies {
     compile 'com.android.support:appcompat-v7:23.4.0'
     compile 'com.android.support:design:23.4.0'
     compile 'com.umeng.analytics:analytics:latest.integration'
-
+    compile files('libs/com.umeng.fb.5.2.0.jar')
 }

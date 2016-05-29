@@ -30,6 +30,14 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+
+        <!-- umeng feedback -->
+        <activity
+            android:name="com.umeng.fb.ConversationActivity"
+            android:configChanges="orientation|keyboardHidden"
+            android:screenOrientation="portrait"
+            android:windowSoftInputMode="adjustResize"/>
+
         <!-- Umeng-->
         <meta-data
             android:name="UMENG_APPKEY"

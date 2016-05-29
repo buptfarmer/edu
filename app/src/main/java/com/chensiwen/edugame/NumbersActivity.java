@@ -3,7 +3,6 @@ package com.chensiwen.edugame;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -11,9 +10,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.umeng.analytics.MobclickAgent;
+import com.umeng.fb.FeedbackAgent;
+import com.umeng.fb.SyncListener;
+import com.umeng.fb.model.Reply;
+
+import java.util.List;
 
 public class NumbersActivity extends BaseAppCompatActivity {
     private static final String TAG = "NumbersActivity";
+    private FeedbackAgent mAgent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,8 +36,25 @@ public class NumbersActivity extends BaseAppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        initData();
     }
 
+    private void initData() {
+        // fix gradle application id & pkg name caused crash: http://bbs.umeng.com/thread-8071-1-1.html
+        com.umeng.fb.util.Res.setPackageName(R.class.getPackage().getName());
+        mAgent = new FeedbackAgent(this);
+        mAgent.getDefaultConversation().sync(new SyncListener() {
+            @Override
+            public void onReceiveDevReply(List<Reply> list) {
+            }
+
+            @Override
+            public void onSendUserReply(List<Reply> list) {
+
+            }
+        });
+    }
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -56,6 +78,15 @@ public class NumbersActivity extends BaseAppCompatActivity {
         if (id == R.id.action_settings) {
             MobclickAgent.onEvent(getApplicationContext(), StatsConstants.NUMBERS_CLICK_SETTINGS);
             return true;
+        } else if (id == R.id.action_feedback) {
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    mAgent.updateUserInfo();
+                }
+            }).start();
+            mAgent.startFeedbackActivity();
         }
 
         return super.onOptionsItemSelected(item);
