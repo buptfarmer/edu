@@ -113,6 +113,7 @@ public class NumbersActivityFragment extends BaseFragment {
                 @Override
                 public void onClick(View v) {
                     super.onClick(v);
+                    EduApplication.getSpeechSynthesizer().speak(value);
                     MobclickAgent.onEvent(mActivity, StatsConstants.NUMBERS_CLICK_PREFIX + value);
                 }
             });
