@@ -10,6 +10,7 @@ import android.graphics.Rect;
 import android.util.AttributeSet;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.view.Window;
 
 import com.chensiwen.edugame.Utils;
@@ -108,7 +109,15 @@ public class ExplosionField extends View {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                view.animate().alpha(1f).setDuration(150).start();
+                ViewPropertyAnimator animator = view.animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(150);
+                animator.setListener(new AnimatorListenerAdapter() {
+                    @Override
+                    public void onAnimationEnd(Animator animation) {
+                        super.onAnimationEnd(animation);
+
+                    }
+                });
+                animator.start();
 
                 //动画结束时从动画集中移除
                 explosionAnimators.remove(animation);

@@ -1,17 +1,20 @@
 package com.chensiwen.edugame;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 
 import com.chensiwen.edugame.particle.ExplosionField;
 import com.chensiwen.edugame.particle.ParticleListener;
 import com.chensiwen.edugame.particle.factory.FallingParticleFactory;
-import com.chensiwen.edugame.particle.factory.VerticalAscentFactory;
+import com.umeng.analytics.MobclickAgent;
+
+import java.util.ArrayList;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -19,6 +22,10 @@ import com.chensiwen.edugame.particle.factory.VerticalAscentFactory;
 public class NumbersActivityFragment extends BaseFragment {
     private static final String TAG = "NumbersActivityFragment";
     private View mRootView;
+
+    private RecordRecyclerAdapter mRecyclerAdapter;
+    private RecyclerView mRecyclerView;
+    private ArrayList<String> mContentList = new ArrayList<>();
 
     public NumbersActivityFragment() {
     }
@@ -33,27 +40,82 @@ public class NumbersActivityFragment extends BaseFragment {
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        prepareData();
 
-        ExplosionField explosionField5 = new ExplosionField(getActivity(), new FallingParticleFactory());
-        mRootView.findViewById(R.id.text_particle).setOnClickListener(new ParticleListener(explosionField5) {
-            @Override
-            public void onClick(View v) {
-                super.onClick(v);
-                Toast.makeText(getActivity(), "text_particle clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
+        mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.recycler_view);
+        StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
+        mRecyclerView.setLayoutManager(layoutManager);
+        mRecyclerAdapter = new RecordRecyclerAdapter((BaseAppCompatActivity) getActivity(), mContentList);
+        mRecyclerView.setAdapter(mRecyclerAdapter);
+    }
 
-        mRootView.findViewById(R.id.layout_particle).setOnClickListener(new ParticleListener(explosionField5) {
-            @Override
-            public void onClick(View v) {
-                super.onClick(v);
-                Toast.makeText(getActivity(), "layout_particle clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
+    private void prepareData() {
+        for (int i = 0; i < 10; i++) {
+            mContentList.add(String.valueOf(i));
+        }
     }
 
     @Override
     protected String getUmengTag() {
         return TAG;
+    }
+
+
+    static class RecordRecyclerAdapter extends RecyclerView.Adapter<MyViewHolder> {
+        private ArrayList<String> mList;
+        private BaseAppCompatActivity context;
+
+        public RecordRecyclerAdapter(BaseAppCompatActivity context, ArrayList<String> lists) {
+            this.context = context;
+            this.mList = lists;
+        }
+
+        @Override
+        public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            CardView view = (CardView) LayoutInflater.from(context).inflate(R.layout.main_ui_waterfall_item, parent, false);
+            MyViewHolder viewHolder = new MyViewHolder(context, view);
+            return viewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(final MyViewHolder holder, int position) {
+            holder.update(mList.get(position));
+        }
+
+        @Override
+        public int getItemCount() {
+            return mList.size();
+        }
+    }
+
+    static class MyViewHolder extends RecyclerView.ViewHolder {
+        public CardView mRootView;
+        public TextView mContent;
+        private BaseAppCompatActivity mActivity;
+        private ExplosionField mExplosion;
+
+        public MyViewHolder(BaseAppCompatActivity context, CardView itemView) {
+            super(itemView);
+            mActivity = context;
+            mRootView = itemView;
+            mContent = (TextView) itemView.findViewById(R.id.content);
+            mExplosion = new ExplosionField(mActivity, new FallingParticleFactory());
+        }
+
+        public void update(final String value) {
+            mContent.setText(value);
+            mRootView.setOnClickListener(new ParticleListener(mExplosion) {
+                @Override
+                public void onExplodeEnd() {
+
+                }
+
+                @Override
+                public void onClick(View v) {
+                    super.onClick(v);
+                    MobclickAgent.onEvent(mActivity, StatsConstants.NUMBERS_CLICK_PREFIX + value);
+                }
+            });
+        }
     }
 }

@@ -1,0 +1,11 @@
+numbers_click_prefix_0,click_0,0
+numbers_click_prefix_1,click_1,0
+numbers_click_prefix_2,click_2,0
+numbers_click_prefix_3,click_3,0
+numbers_click_prefix_4,click_4,0
+numbers_click_prefix_5,click_5,0
+numbers_click_prefix_6,click_6,0
+numbers_click_prefix_7,click_7,0
+numbers_click_prefix_8,click_8,0
+numbers_click_prefix_9,click_9,0
+

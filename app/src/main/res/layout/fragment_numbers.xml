@@ -10,6 +10,13 @@
               tools:context="com.chensiwen.edugame.NumbersActivityFragment"
               tools:showIn="@layout/activity_numbers">
 
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/recycler_view"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scrollbars="vertical"
+        android:scrollingCache="false"/>
     <TextView
         android:id="@+id/text_particle"
         android:layout_marginTop="20dp"
@@ -35,5 +42,19 @@
             android:text="Hello World!"/>
 
     </LinearLayout>
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/cardview_particle"
+        android:layout_width="80dp"
+        android:layout_height="40dp"
+        android:elevation="10dp"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Hello CardView"/>
+    </android.support.v7.widget.CardView>
+
 
 </LinearLayout>

@@ -8,4 +8,6 @@ public class StatsConstants {
     public static final String NUMBERS_CLICK_MENU = "numbers_click_menu";
     public static final String NUMBERS_CLICK_SETTINGS = "number_click_settings";
     public static final String NUMBERS_CLICK_FAT = "numbers_click_fat";
+    // numbers game click 0-9
+    public static final String NUMBERS_CLICK_PREFIX = "numbers_click_prefix_";
 }

@@ -12,6 +12,8 @@ abstract public class ParticleListener implements View.OnClickListener {
         mExplosionField = explosionField;
     }
 
+    abstract public void onExplodeEnd();
+
     @Override
     public void onClick(View v) {
         mExplosionField.explode(v);
