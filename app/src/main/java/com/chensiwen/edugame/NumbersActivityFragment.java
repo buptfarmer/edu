@@ -72,7 +72,7 @@ public class NumbersActivityFragment extends BaseFragment {
 
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            CardView view = (CardView) LayoutInflater.from(context).inflate(R.layout.main_ui_waterfall_item, parent, false);
+            CardView view = (CardView) LayoutInflater.from(context).inflate(R.layout.numbers_game_item, parent, false);
             MyViewHolder viewHolder = new MyViewHolder(context, view);
             return viewHolder;
         }
