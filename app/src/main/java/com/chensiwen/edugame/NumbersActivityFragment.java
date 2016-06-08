@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,11 +16,33 @@ import com.chensiwen.edugame.particle.factory.FallingParticleFactory;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class NumbersActivityFragment extends BaseFragment {
+    private static final int[] COLORS = new int[]{
+            R.color.common_red,
+            R.color.common_pink,
+            R.color.common_purple,
+            R.color.common_deep_purple,
+            R.color.common_indigo,
+            R.color.common_blue,
+            R.color.common_light_blue,
+            R.color.common_cyan,
+            R.color.common_teal,
+            R.color.common_green,
+            R.color.common_light_green,
+            R.color.common_lime,
+            R.color.common_yellow,
+            R.color.common_amber,
+            R.color.common_orange,
+            R.color.common_deep_orange,
+            R.color.common_brown,
+            R.color.common_grey,
+            R.color.common_blue_grey,
+    };
     private static final String TAG = "NumbersActivityFragment";
     private View mRootView;
 
@@ -50,12 +73,14 @@ public class NumbersActivityFragment extends BaseFragment {
     }
 
     private void prepareData() {
-        for (int i = 0; i < 10; i++) {
+        for (int i = 0; i < 1001; i++) {
             mContentList.add(String.valueOf(i));
         }
     }
 
     @Override
+
+
     protected String getUmengTag() {
         return TAG;
     }
@@ -79,7 +104,7 @@ public class NumbersActivityFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(final MyViewHolder holder, int position) {
-            holder.update(mList.get(position));
+            holder.update(mList.get(position), position);
         }
 
         @Override
@@ -93,6 +118,7 @@ public class NumbersActivityFragment extends BaseFragment {
         public TextView mContent;
         private BaseAppCompatActivity mActivity;
         private ExplosionField mExplosion;
+        private Random mRandom;
 
         public MyViewHolder(BaseAppCompatActivity context, CardView itemView) {
             super(itemView);
@@ -102,12 +128,19 @@ public class NumbersActivityFragment extends BaseFragment {
             mExplosion = new ExplosionField(mActivity, new FallingParticleFactory());
         }
 
-        public void update(final String value) {
+        private int getRandomColor() {
+            return mActivity.getResources().getColor(COLORS[mRandom.nextInt(COLORS.length)]);
+        }
+
+        public void update(final String value, int position) {
+            mRandom = new Random(position);
             mContent.setText(value);
+            mRootView.setBackgroundColor(getRandomColor());
             mRootView.setOnClickListener(new ParticleListener(mExplosion) {
                 @Override
                 public void onExplodeEnd() {
-
+                    int color = getRandomColor();
+                    mRootView.setBackgroundColor(color);
                 }
 
                 @Override

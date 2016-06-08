@@ -59,8 +59,9 @@ public class ExplosionField extends View {
      * 爆破
      *
      * @param view 使得该view爆破
+     * @param callback
      */
-    public void explode(final View view) {
+    public void explode(final View view, final ParticleListener callback) {
         //防止重复点击
         if (explosionAnimatorsMap.get(view) != null && explosionAnimatorsMap.get(view).isStarted()) {
             return;
@@ -90,13 +91,13 @@ public class ExplosionField extends View {
             @Override
             public void onAnimationEnd(Animator animation) {
                 super.onAnimationEnd(animation);
-                explode(view, rect);
+                explode(view, rect, callback);
             }
         });
         animator.start();
     }
 
-    private void explode(final View view, Rect rect) {
+    private void explode(final View view, Rect rect, final ParticleListener callback) {
         final ExplosionAnimator animator = new ExplosionAnimator(this, Utils.createBitmapFromView(view), rect, mParticleFactory);
         explosionAnimators.add(animator);
         explosionAnimatorsMap.put(view, animator);
@@ -123,6 +124,9 @@ public class ExplosionField extends View {
                 explosionAnimators.remove(animation);
                 explosionAnimatorsMap.remove(view);
                 animation = null;
+                if (callback != null) {
+                    callback.onExplodeEnd();
+                }
             }
         });
         animator.start();
@@ -164,7 +168,7 @@ public class ExplosionField extends View {
             onClickListener = new OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    ExplosionField.this.explode(v);
+                    ExplosionField.this.explode(v, null);
                 }
             };
         }
