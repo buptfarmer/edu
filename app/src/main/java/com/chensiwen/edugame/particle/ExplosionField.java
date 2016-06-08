@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.view.ViewPropertyAnimator;
 import android.view.Window;
 
+import com.chensiwen.edugame.ExplodeItemAnimator;
 import com.chensiwen.edugame.Utils;
 import com.chensiwen.edugame.particle.factory.ParticleFactory;
 
@@ -61,12 +62,12 @@ public class ExplosionField extends View {
      * @param view 使得该view爆破
      * @param callback
      */
-    public void explode(final View view, final ParticleListener callback) {
+    public void explode(final View view, final ExplodeItemAnimator.VpaListenerAdapter callback) {
         //防止重复点击
         if (explosionAnimatorsMap.get(view) != null && explosionAnimatorsMap.get(view).isStarted()) {
             return;
         }
-
+        callback.onAnimationStart(view);
         final Rect rect = new Rect();
         view.getGlobalVisibleRect(rect); //得到view相对于整个屏幕的坐标
         int contentTop = ((ViewGroup) getParent()).getTop();
@@ -97,7 +98,7 @@ public class ExplosionField extends View {
         animator.start();
     }
 
-    private void explode(final View view, Rect rect, final ParticleListener callback) {
+    private void explode(final View view, Rect rect, final ExplodeItemAnimator.VpaListenerAdapter callback) {
         final ExplosionAnimator animator = new ExplosionAnimator(this, Utils.createBitmapFromView(view), rect, mParticleFactory);
         explosionAnimators.add(animator);
         explosionAnimatorsMap.put(view, animator);
@@ -110,23 +111,23 @@ public class ExplosionField extends View {
 
             @Override
             public void onAnimationEnd(Animator animation) {
-                ViewPropertyAnimator animator = view.animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(150);
-                animator.setListener(new AnimatorListenerAdapter() {
-                    @Override
-                    public void onAnimationEnd(Animator animation) {
-                        super.onAnimationEnd(animation);
-
-                    }
-                });
-                animator.start();
+                //ViewPropertyAnimator animator = view.animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(10);
+                //animator.setListener(new AnimatorListenerAdapter() {
+                //    @Override
+                //    public void onAnimationEnd(Animator animation) {
+                //        super.onAnimationEnd(animation);
+                //    }
+                //});
+                //animator.start();
 
                 //动画结束时从动画集中移除
                 explosionAnimators.remove(animation);
                 explosionAnimatorsMap.remove(view);
                 animation = null;
                 if (callback != null) {
-                    callback.onExplodeEnd();
+                    callback.onAnimationEnd(view);
                 }
+
             }
         });
         animator.start();

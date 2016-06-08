@@ -1,15 +1,20 @@
 package com.chensiwen.edugame;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
 import android.support.v7.widget.CardView;
+import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewPropertyAnimator;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationSet;
@@ -82,7 +87,7 @@ public class NumbersActivityFragment extends BaseFragment implements Handler.Cal
         mRecyclerAdapter = new RecordRecyclerAdapter((BaseAppCompatActivity) getActivity(), mContentList, mHandler);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         //mRecyclerView.setAnimation();
-        //mRecyclerView.setItemAnimator();
+        mRecyclerView.setItemAnimator(new ExplodeItemAnimator(getActivity()));
         //Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.umeng_fb_dialog_enter_anim);
         //mRecyclerView.setLayoutAnimation(new GridLayoutAnimationController(anim));
 
@@ -110,7 +115,8 @@ public class NumbersActivityFragment extends BaseFragment implements Handler.Cal
         if (MSG_EXPLOSION_DONE == msg.what) {
             int position = msg.arg1;
             mContentList.remove(position);
-            mRecyclerAdapter.notifyDataSetChanged();
+            mRecyclerAdapter.notifyItemRemoved(position);
+            mRecyclerAdapter.notifyItemRangeChanged(position, mRecyclerAdapter.getItemCount());
         }
         return true;
     }
@@ -165,26 +171,49 @@ public class NumbersActivityFragment extends BaseFragment implements Handler.Cal
         }
 
         public void update(final String value, final int position, final Handler handler) {
+            Log.i(TAG, String.format("update: value:%s, position:%d", value, position));
+
             mRandom = new Random(position);
             mContent.setText(value);
             mRootView.setBackgroundColor(getRandomColor());
-            mRootView.setOnClickListener(new ParticleListener(mExplosion) {
+            //mRootView.setOnClickListener(new ParticleListener(mExplosion) {
+            //    @Override
+            //    public void onExplodeEnd() {
+            //        int color = getRandomColor();
+            //        mRootView.setBackgroundColor(color);
+            //        if (handler != null) {
+            //            handler.obtainMessage(MSG_EXPLOSION_DONE, position, 0).sendToTarget();
+            //        }
+            //        Log.i(TAG, "onExplodeEnd: position:" + position);
+            //        Log.i(TAG, "onExplodeEnd: value:" + value);
+            //    }
+            //
+            //    @Override
+            //    public void onClick(View v) {
+            //        super.onClick(v);
+            //        EduApplication.getSpeechSynthesizer().speak(value);
+            //        MobclickAgent.onEvent(mActivity, StatsConstants.NUMBERS_CLICK_PREFIX + value);
+            //    }
+            //});
+            mRootView.setOnClickListener(new View.OnClickListener() {
                 @Override
-                public void onExplodeEnd() {
-                    int color = getRandomColor();
-                    mRootView.setBackgroundColor(color);
+                public void onClick(View v) {
                     if (handler != null) {
                         handler.obtainMessage(MSG_EXPLOSION_DONE, position, 0).sendToTarget();
                     }
-                }
-
-                @Override
-                public void onClick(View v) {
-                    super.onClick(v);
                     EduApplication.getSpeechSynthesizer().speak(value);
                     MobclickAgent.onEvent(mActivity, StatsConstants.NUMBERS_CLICK_PREFIX + value);
                 }
             });
+
+            ViewPropertyAnimator animator = mRootView.animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(1000);
+            animator.setListener(new AnimatorListenerAdapter() {
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    super.onAnimationEnd(animation);
+                }
+            });
+            animator.start();
         }
     }
 }
