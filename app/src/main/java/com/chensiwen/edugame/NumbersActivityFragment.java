@@ -1,13 +1,22 @@
 package com.chensiwen.edugame;
 
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.os.Message;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.AccelerateInterpolator;
+import android.view.animation.Animation;
+import android.view.animation.AnimationSet;
+import android.view.animation.AnimationUtils;
+import android.view.animation.BounceInterpolator;
+import android.view.animation.GridLayoutAnimationController;
+import android.view.animation.LayoutAnimationController;
 import android.widget.TextView;
 
 import com.chensiwen.edugame.particle.ExplosionField;
@@ -21,7 +30,8 @@ import java.util.Random;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class NumbersActivityFragment extends BaseFragment {
+public class NumbersActivityFragment extends BaseFragment implements Handler.Callback {
+    private static final int MSG_EXPLOSION_DONE = 1;
     private static final int[] COLORS = new int[]{
             R.color.common_red,
             R.color.common_pink,
@@ -49,6 +59,7 @@ public class NumbersActivityFragment extends BaseFragment {
     private RecordRecyclerAdapter mRecyclerAdapter;
     private RecyclerView mRecyclerView;
     private ArrayList<String> mContentList = new ArrayList<>();
+    private Handler mHandler = new Handler(Looper.myLooper(), this);
 
     public NumbersActivityFragment() {
     }
@@ -68,31 +79,52 @@ public class NumbersActivityFragment extends BaseFragment {
         mRecyclerView = (RecyclerView) mRootView.findViewById(R.id.recycler_view);
         StaggeredGridLayoutManager layoutManager = new StaggeredGridLayoutManager(3, StaggeredGridLayoutManager.VERTICAL);
         mRecyclerView.setLayoutManager(layoutManager);
-        mRecyclerAdapter = new RecordRecyclerAdapter((BaseAppCompatActivity) getActivity(), mContentList);
+        mRecyclerAdapter = new RecordRecyclerAdapter((BaseAppCompatActivity) getActivity(), mContentList, mHandler);
         mRecyclerView.setAdapter(mRecyclerAdapter);
+        //mRecyclerView.setAnimation();
+        //mRecyclerView.setItemAnimator();
+        //Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.umeng_fb_dialog_enter_anim);
+        //mRecyclerView.setLayoutAnimation(new GridLayoutAnimationController(anim));
+
+        Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.layout_item_anim);
+        LayoutAnimationController layoutAnimationController = new LayoutAnimationController(animation);
+        layoutAnimationController.setInterpolator(new BounceInterpolator());
+        layoutAnimationController.setDelay(0.1f);
+        layoutAnimationController.setOrder(LayoutAnimationController.ORDER_RANDOM);
+        mRecyclerView.setLayoutAnimation(layoutAnimationController);
     }
 
     private void prepareData() {
-        for (int i = 0; i < 1001; i++) {
+        for (int i = 0; i < 21; i++) {
             mContentList.add(String.valueOf(i));
         }
     }
 
     @Override
-
-
     protected String getUmengTag() {
         return TAG;
+    }
+
+    @Override
+    public boolean handleMessage(Message msg) {
+        if (MSG_EXPLOSION_DONE == msg.what) {
+            int position = msg.arg1;
+            mContentList.remove(position);
+            mRecyclerAdapter.notifyDataSetChanged();
+        }
+        return true;
     }
 
 
     static class RecordRecyclerAdapter extends RecyclerView.Adapter<MyViewHolder> {
         private ArrayList<String> mList;
         private BaseAppCompatActivity context;
+        private Handler mHandler;
 
-        public RecordRecyclerAdapter(BaseAppCompatActivity context, ArrayList<String> lists) {
+        public RecordRecyclerAdapter(BaseAppCompatActivity context, ArrayList<String> lists, Handler handler) {
             this.context = context;
             this.mList = lists;
+            this.mHandler = handler;
         }
 
         @Override
@@ -104,7 +136,7 @@ public class NumbersActivityFragment extends BaseFragment {
 
         @Override
         public void onBindViewHolder(final MyViewHolder holder, int position) {
-            holder.update(mList.get(position), position);
+            holder.update(mList.get(position), position, mHandler);
         }
 
         @Override
@@ -132,7 +164,7 @@ public class NumbersActivityFragment extends BaseFragment {
             return mActivity.getResources().getColor(COLORS[mRandom.nextInt(COLORS.length)]);
         }
 
-        public void update(final String value, int position) {
+        public void update(final String value, final int position, final Handler handler) {
             mRandom = new Random(position);
             mContent.setText(value);
             mRootView.setBackgroundColor(getRandomColor());
@@ -141,6 +173,9 @@ public class NumbersActivityFragment extends BaseFragment {
                 public void onExplodeEnd() {
                     int color = getRandomColor();
                     mRootView.setBackgroundColor(color);
+                    if (handler != null) {
+                        handler.obtainMessage(MSG_EXPLOSION_DONE, position, 0).sendToTarget();
+                    }
                 }
 
                 @Override

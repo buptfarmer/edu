@@ -15,7 +15,7 @@
         android:layout_marginTop="10dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:scrollbars="vertical"
+        android:scrollbars="none"
         android:scrollingCache="false"/>
     <TextView
         android:id="@+id/text_particle"
