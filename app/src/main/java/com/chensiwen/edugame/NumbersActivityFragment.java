@@ -22,6 +22,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.BounceInterpolator;
 import android.view.animation.GridLayoutAnimationController;
 import android.view.animation.LayoutAnimationController;
+import android.view.animation.OvershootInterpolator;
 import android.widget.TextView;
 
 import com.chensiwen.edugame.particle.ExplosionField;
@@ -86,14 +87,16 @@ public class NumbersActivityFragment extends BaseFragment implements Handler.Cal
         mRecyclerView.setLayoutManager(layoutManager);
         mRecyclerAdapter = new RecordRecyclerAdapter((BaseAppCompatActivity) getActivity(), mContentList, mHandler);
         mRecyclerView.setAdapter(mRecyclerAdapter);
-        //mRecyclerView.setAnimation();
-        mRecyclerView.setItemAnimator(new ExplodeItemAnimator(getActivity()));
-        //Animation anim = AnimationUtils.loadAnimation(getActivity(), R.anim.umeng_fb_dialog_enter_anim);
-        //mRecyclerView.setLayoutAnimation(new GridLayoutAnimationController(anim));
+        RecyclerView.ItemAnimator itemAnimator = new ExplodeItemAnimator(getActivity());
+        itemAnimator.setMoveDuration(1000);
+        itemAnimator.setChangeDuration(1000);
+        itemAnimator.setRemoveDuration(1000);
+        mRecyclerView.setItemAnimator(itemAnimator);
 
         Animation animation = AnimationUtils.loadAnimation(getActivity(), R.anim.layout_item_anim);
+        animation.setInterpolator(new OvershootInterpolator());
         LayoutAnimationController layoutAnimationController = new LayoutAnimationController(animation);
-        layoutAnimationController.setInterpolator(new BounceInterpolator());
+        //layoutAnimationController.setInterpolator(new OvershootInterpolator());
         layoutAnimationController.setDelay(0.1f);
         layoutAnimationController.setOrder(LayoutAnimationController.ORDER_RANDOM);
         mRecyclerView.setLayoutAnimation(layoutAnimationController);
