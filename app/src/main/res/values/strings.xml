@@ -12,4 +12,6 @@
         <item>"Sat"</item>
         <item>"Sun"</item>
     </string-array>
+    <string name="title_activity_entrance_list">EntranceListActivity</string>
+    <string name="title_activity_animated_vector_drawable">AnimatedVectorDrawableActivity</string>
 </resources>

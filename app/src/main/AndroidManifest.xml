@@ -18,17 +18,11 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".NumbersActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
-
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
         </activity>
 
         <!-- umeng feedback -->
@@ -38,13 +32,29 @@
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize"/>
 
-        <!-- Umeng-->
+        <!-- Umeng -->
         <meta-data
             android:name="UMENG_APPKEY"
             android:value="574877e767e58ec15e001343"/>
         <meta-data
             android:name="UMENG_CHANNEL"
             android:value="HomeMade"/>
+
+        <activity
+            android:name=".EntranceListActivity"
+            android:label="@string/title_activity_entrance_list"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".AnimatedVectorDrawableActivity"
+            android:label="@string/title_activity_animated_vector_drawable"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>
