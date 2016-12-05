@@ -1,29 +1,44 @@
 package com.chensiwen.edugame;
 
+import android.databinding.DataBindingUtil;
+import android.graphics.drawable.Animatable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 
-public class AnimatedVectorDrawableActivity extends AppCompatActivity {
+import com.chensiwen.edugame.databinding.ActivityAnimatedVectorDrawableBinding;
+
+public class AnimatedVectorDrawableActivity extends BaseAppCompatActivity {
+
+
+    public class BindHanlders {
+        public void onClickNumbers(View view) {
+        }
+
+        public void onClickAnimated(View view) {
+            ImageView imageView = binding.animated;
+            Drawable drawable = imageView.getDrawable();
+            if (drawable instanceof Animatable) {
+                ((Animatable) drawable).start();
+            }
+        }
+    }
+
+    private ActivityAnimatedVectorDrawableBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_animated_vector_drawable);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        binding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_animated_vector_drawable, null, false);
+        setContentView(binding.getRoot());
+        Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
+        BindHanlders handlers = new BindHanlders();
+        binding.setHandlers(handlers);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
     }
 
 }
