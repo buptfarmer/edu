@@ -25,6 +25,18 @@ public class AnimatedVectorDrawableActivity extends BaseAppCompatActivity {
                 ((Animatable) drawable).start();
             }
         }
+        public void onClickRepeatAnimated(View view) {
+            ImageView imageView = binding.repeatAnimated;
+            Drawable drawable = imageView.getDrawable();
+            if (drawable instanceof Animatable) {
+                if (((Animatable) drawable).isRunning()) {
+                    ((Animatable) drawable).stop();
+                } else {
+                    ((Animatable) drawable).start();
+                }
+
+            }
+        }
     }
 
     private ActivityAnimatedVectorDrawableBinding binding;
