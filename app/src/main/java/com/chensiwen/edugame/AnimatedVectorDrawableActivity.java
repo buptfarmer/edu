@@ -64,6 +64,19 @@ public class AnimatedVectorDrawableActivity extends BaseAppCompatActivity {
 
             }
         }
+        public void onClickAniamtedHandWriting(View view) {
+            ImageView imageView = binding.handwritingAnimated;
+            Drawable drawable = getResources().getDrawable(R.drawable.animted_handwriting);
+            imageView.setImageDrawable(drawable);
+            if (drawable instanceof Animatable) {
+                if (((Animatable) drawable).isRunning()) {
+                    ((Animatable) drawable).stop();
+                } else {
+                    ((Animatable) drawable).start();
+                }
+
+            }
+        }
     }
 
     private ActivityAnimatedVectorDrawableBinding binding;

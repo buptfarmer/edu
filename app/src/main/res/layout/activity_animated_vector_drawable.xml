@@ -172,6 +172,38 @@
                 android:onClick="@{handlers::onClickAniamtedLeaf}"
                 app:srcCompat="@drawable/android_logo_vector_morphable"
                 tools:ignore="MissingPrefix"/>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{handlers::onClickAniamtedHandWriting}"
+                android:layout_marginTop="10dp"
+                >
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/handwriting_animated_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="Click me to see the handwriting animation"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <ImageView
+                        android:id="@+id/handwriting_animated"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/handwriting_animated_title"
+                        app:srcCompat="@drawable/vd_handwriting_android_design"
+                        tools:ignore="MissingPrefix"/>
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.CardView>
         </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton
