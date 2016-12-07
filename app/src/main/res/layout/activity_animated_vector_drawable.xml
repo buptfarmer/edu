@@ -118,7 +118,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:text="AniamtedVectorDrawableExample"
+                        android:text="RepeatedRotation"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
 
@@ -133,6 +133,45 @@
                         tools:ignore="MissingPrefix"/>
                 </android.support.constraint.ConstraintLayout>
             </android.support.v7.widget.CardView>
+
+            <android.support.v7.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                >
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <TextView
+                        android:id="@+id/morph_animated_title"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="10dp"
+                        android:text="MorphOnly"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <ImageView
+                        android:id="@+id/morph_animated"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:onClick="@{handlers::onClickMorphOnly}"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintTop_toBottomOf="@id/morph_animated_title"
+                        app:srcCompat="@drawable/ic_test_vector_morph_only"
+                        tools:ignore="MissingPrefix"/>
+                </android.support.constraint.ConstraintLayout>
+            </android.support.v7.widget.CardView>
+            <ImageView
+                android:id="@+id/leaf_animated_2"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_marginTop="20dp"
+                android:onClick="@{handlers::onClickAniamtedLeaf}"
+                app:srcCompat="@drawable/android_logo_vector_morphable"
+                tools:ignore="MissingPrefix"/>
         </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton

@@ -37,6 +37,33 @@ public class AnimatedVectorDrawableActivity extends BaseAppCompatActivity {
 
             }
         }
+        public void onClickMorphOnly(View view) {
+            ImageView imageView = binding.morphAnimated;
+            Drawable drawable = getResources().getDrawable(R.drawable.ic_test_vector_morph_only);
+            imageView.setImageDrawable(drawable);
+            if (drawable instanceof Animatable) {
+                if (((Animatable) drawable).isRunning()) {
+                    ((Animatable) drawable).stop();
+                } else {
+                    ((Animatable) drawable).start();
+                }
+
+            }
+        }
+        public void onClickAniamtedLeaf(View view) {
+            ImageView imageView = binding.leafAnimated2;
+            Drawable drawable = getResources().getDrawable(R.drawable.animated_leaf);
+            imageView.setImageDrawable(drawable);
+            //imageView.setImageResource(R.drawable.animated_leaf);
+            if (drawable instanceof Animatable) {
+                if (((Animatable) drawable).isRunning()) {
+                    ((Animatable) drawable).stop();
+                } else {
+                    ((Animatable) drawable).start();
+                }
+
+            }
+        }
     }
 
     private ActivityAnimatedVectorDrawableBinding binding;
