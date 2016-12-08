@@ -66,7 +66,7 @@ public class AnimatedVectorDrawableActivity extends BaseAppCompatActivity {
         }
         public void onClickAniamtedHandWriting(View view) {
             ImageView imageView = binding.handwritingAnimated;
-            Drawable drawable = getResources().getDrawable(R.drawable.animted_handwriting);
+            Drawable drawable = getResources().getDrawable(R.drawable.animated_handwriting);
             imageView.setImageDrawable(drawable);
             if (drawable instanceof Animatable) {
                 if (((Animatable) drawable).isRunning()) {
@@ -76,6 +76,29 @@ public class AnimatedVectorDrawableActivity extends BaseAppCompatActivity {
                 }
 
             }
+        }
+        public void onClickAniamtedNumber3(View view) {
+            ImageView imageView = binding.logo37DegreeAnimated;
+            Drawable drawable = getResources().getDrawable(R.drawable.animated_logo_37_degree);
+            imageView.setImageDrawable(drawable);
+            if (drawable instanceof Animatable) {
+                if (((Animatable) drawable).isRunning()) {
+                    ((Animatable) drawable).stop();
+                } else {
+                    ((Animatable) drawable).start();
+                }
+            }
+            //if (drawable instanceof AnimatedVectorDrawable) {
+            //
+            //}
+            //if (drawable instanceof Animatable2) {
+            //    ((Animatable2) drawable).registerAnimationCallback(new Animatable2.AnimationCallback() {
+            //        @Override
+            //        public void onAnimationEnd(Drawable drawable) {
+            //            super.onAnimationEnd(drawable);
+            //        }
+            //    });
+            //}
         }
     }
 
