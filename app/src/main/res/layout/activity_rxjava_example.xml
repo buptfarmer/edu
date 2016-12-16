@@ -69,7 +69,8 @@
                         android:layout_height="wrap_content"
                         android:text="rx_test_1"
                         android:onClick="@{handlers::onClickTest1}"
-                        app:layout_constraintLeft_toRightOf="@id/rx_test_1"
+                        app:layout_constraintTop_toBottomOf="@id/rx_test_1"
+                        app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintRight_toRightOf="parent"/>
                 </android.support.constraint.ConstraintLayout>
 
@@ -78,7 +79,6 @@
             <android.support.v7.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
                 >
 
                 <android.support.constraint.ConstraintLayout
@@ -86,24 +86,24 @@
                     android:layout_height="wrap_content">
 
                     <TextView
-                        android:id="@+id/animated_title"
+                        android:id="@+id/rx_test_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="10dp"
-                        android:text="AniamtedVectorDrawableExample"
+                        android:text="rx_test_1"
                         app:layout_constraintLeft_toLeftOf="parent"
                         app:layout_constraintTop_toTopOf="parent"/>
 
-                    <ImageView
-                        android:id="@+id/animated"
-                        android:layout_width="48dp"
-                        android:layout_height="48dp"
-                        android:onClick="@{handlers::onClickAnimated}"
+                    <Button
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="rx_test_2"
+                        android:onClick="@{handlers::onClickTest2}"
+                        app:layout_constraintTop_toBottomOf="@id/rx_test_2"
                         app:layout_constraintLeft_toLeftOf="parent"
-                        app:layout_constraintTop_toBottomOf="@id/animated_title"
-                        app:srcCompat="@drawable/ic_test_vector_animation"
-                        tools:ignore="MissingPrefix"/>
+                        app:layout_constraintRight_toRightOf="parent"/>
                 </android.support.constraint.ConstraintLayout>
+
             </android.support.v7.widget.CardView>
         </LinearLayout>
         </android.support.v4.widget.NestedScrollView>
