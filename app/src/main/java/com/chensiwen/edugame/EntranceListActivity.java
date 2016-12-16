@@ -21,6 +21,9 @@ public class EntranceListActivity extends BaseAppCompatActivity {
         public void onClickAVD(View view) {
             startActivity(new Intent(EntranceListActivity.this, AnimatedVectorDrawableActivity.class));
         }
+        public void onClickRxJava(View view) {
+            startActivity(new Intent(EntranceListActivity.this, RxJavaExampleActivity.class));
+        }
     }
 
     private ActivityEntranceListBinding binding;

@@ -55,6 +55,11 @@
             android:label="@string/title_activity_animated_vector_drawable"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".RxJavaExampleActivity"
+            android:label="@string/title_activity_rxjava_example"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
     </application>
 
 </manifest>

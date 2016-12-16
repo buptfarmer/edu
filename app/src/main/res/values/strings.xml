@@ -14,4 +14,5 @@
     </string-array>
     <string name="title_activity_entrance_list">EntranceListActivity</string>
     <string name="title_activity_animated_vector_drawable">AnimatedVectorDrawableActivity</string>
+    <string name="title_activity_rxjava_example">RxJavaExample</string>
 </resources>
