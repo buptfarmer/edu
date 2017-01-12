@@ -51,6 +51,176 @@
                     android:layout_height="100dp"
                     android:background="@color/common_blue_grey">
 
+                    <android.support.constraint.Guideline
+                        android:id="@+id/guideline_50"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.5"
+                        tools:layout_editor_absoluteX="0dp"
+                        tools:layout_editor_absoluteY="0dp"/>
+
+                    <TextView
+                        android:id="@+id/gone_target_text_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/common_blue"
+                        android:text="Target"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="@id/guideline_50"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/right_bottom_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/common_deep_orange"
+                        android:text="bottom 1"
+                        android:textSize="11sp"
+                        android:visibility="gone"
+                        app:layout_constraintLeft_toLeftOf="@+id/gone_target_text_right"
+                        app:layout_constraintTop_toBottomOf="@+id/gone_target_text_right"
+                        />
+
+                    <TextView
+                        android:id="@+id/right_bottom_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/common_deep_orange"
+                        android:text="bottom 2"
+                        android:textSize="11sp"
+                        app:layout_constraintLeft_toLeftOf="@+id/gone_target_text_right"
+                        app:layout_constraintTop_toBottomOf="@+id/right_bottom_1"
+                        />
+
+                    <TextView
+                        android:id="@+id/gone_target_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/common_blue"
+                        android:text="Target"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/guideline_50"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/left_bottom_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/common_deep_orange"
+                        android:text="bottom 1"
+                        android:textSize="11sp"
+                        app:layout_constraintLeft_toLeftOf="@+id/gone_target_text"
+                        app:layout_constraintTop_toBottomOf="@+id/gone_target_text"
+                        />
+
+                    <TextView
+                        android:id="@+id/left_bottom_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/common_deep_orange"
+                        android:text="bottom 2"
+                        android:textSize="11sp"
+                        app:layout_constraintLeft_toLeftOf="@+id/gone_target_text"
+                        app:layout_constraintTop_toBottomOf="@+id/left_bottom_1"
+                        />
+                </android.support.constraint.ConstraintLayout>
+
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@color/common_blue_grey">
+
+                    <android.support.constraint.Guideline
+                        android:id="@+id/guideline_50_margin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.5"
+                        tools:layout_editor_absoluteX="0dp"
+                        tools:layout_editor_absoluteY="0dp"/>
+
+                    <TextView
+                        android:id="@+id/gone_margin_target_text_right"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/common_blue"
+                        android:text="Target"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="@id/guideline_50_margin"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/right_bottom_1_margin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/common_deep_orange"
+                        android:text="bottom 1"
+                        android:textSize="11sp"
+                        android:visibility="gone"
+                        app:layout_constraintLeft_toLeftOf="@+id/gone_margin_target_text_right"
+                        app:layout_constraintTop_toBottomOf="@+id/gone_margin_target_text_right"
+                        />
+
+                    <TextView
+                        android:id="@+id/right_bottom_2_margin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/common_deep_orange"
+                        android:text="bottom 2"
+                        android:textSize="11sp"
+                        app:layout_constraintLeft_toLeftOf="@+id/right_bottom_1_margin"
+                        app:layout_constraintTop_toBottomOf="@+id/right_bottom_1_margin"
+                        app:layout_goneMarginTop="11dp"
+                        />
+
+                    <TextView
+                        android:id="@+id/gone_margin_target_text"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/common_blue"
+                        android:text="Target"
+                        android:textSize="13sp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/guideline_50_margin"
+                        app:layout_constraintTop_toTopOf="parent"/>
+
+                    <TextView
+                        android:id="@+id/left_bottom_1_margin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/common_deep_orange"
+                        android:text="bottom 1"
+                        android:textSize="11sp"
+                        app:layout_constraintLeft_toLeftOf="@+id/gone_margin_target_text"
+                        app:layout_constraintTop_toBottomOf="@+id/gone_margin_target_text"
+                        />
+
+                    <TextView
+                        android:id="@+id/left_bottom_2_margin"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:background="@color/common_deep_orange"
+                        android:text="bottom 2"
+                        android:textSize="11sp"
+                        app:layout_constraintLeft_toLeftOf="@+id/left_bottom_1_margin"
+                        app:layout_constraintTop_toBottomOf="@+id/left_bottom_1_margin"
+                        />
+                </android.support.constraint.ConstraintLayout>
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="100dp"
+                    android:background="@color/common_blue_grey">
+
                     <TextView
                         android:id="@+id/baseline_target_text"
                         android:layout_width="45dp"
@@ -68,20 +238,20 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/common_deep_orange"
-                        android:textSize="11sp"
                         android:text="baselineOf"
-                        app:layout_constraintLeft_toRightOf="@id/baseline_target_text"
-                        app:layout_constraintBaseline_toBaselineOf="@id/baseline_target_text"
+                        android:textSize="11sp"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/baseline_target_text"
+                        app:layout_constraintLeft_toRightOf="@+id/baseline_target_text"
                         />
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/common_deep_orange"
-                        android:textSize="25sp"
                         android:text="baselineOf"
-                        app:layout_constraintRight_toLeftOf="@id/baseline_target_text"
-                        app:layout_constraintBaseline_toBaselineOf="@id/baseline_target_text"
+                        android:textSize="25sp"
+                        app:layout_constraintBaseline_toBaselineOf="@+id/baseline_target_text"
+                        app:layout_constraintRight_toLeftOf="@+id/baseline_target_text"
                         />
                 </android.support.constraint.ConstraintLayout>
 
@@ -109,8 +279,8 @@
                         android:layout_height="wrap_content"
                         android:background="@color/common_deep_orange"
                         android:text="top_topOf"
-                        app:layout_constraintLeft_toRightOf="@id/top_target_text"
-                        app:layout_constraintTop_toTopOf="@id/top_target_text"
+                        app:layout_constraintLeft_toRightOf="@+id/top_target_text"
+                        app:layout_constraintTop_toTopOf="@+id/top_target_text"
                         />
 
                     <TextView
@@ -119,8 +289,8 @@
                         android:layout_height="wrap_content"
                         android:background="@color/common_deep_orange"
                         android:text="top_bottomOf"
-                        app:layout_constraintLeft_toRightOf="@id/top_target_text"
-                        app:layout_constraintTop_toBottomOf="@id/top_target_text"
+                        app:layout_constraintLeft_toRightOf="@+id/top_target_text"
+                        app:layout_constraintTop_toBottomOf="@+id/top_target_text"
                         />
                 </android.support.constraint.ConstraintLayout>
 
@@ -148,8 +318,8 @@
                         android:layout_height="wrap_content"
                         android:background="@color/common_deep_orange"
                         android:text="bottom_topOf"
-                        app:layout_constraintLeft_toRightOf="@id/bottom_target_text"
-                        app:layout_constraintBottom_toTopOf="@id/bottom_target_text"
+                        app:layout_constraintBottom_toTopOf="@+id/bottom_target_text"
+                        app:layout_constraintLeft_toRightOf="@+id/bottom_target_text"
                         />
 
                     <TextView
@@ -158,8 +328,8 @@
                         android:layout_height="wrap_content"
                         android:background="@color/common_deep_orange"
                         android:text="bottom_bottomOf"
-                        app:layout_constraintLeft_toRightOf="@id/bottom_target_text"
-                        app:layout_constraintBottom_toBottomOf="@id/bottom_target_text"
+                        app:layout_constraintBottom_toBottomOf="@+id/bottom_target_text"
+                        app:layout_constraintLeft_toRightOf="@+id/bottom_target_text"
                         />
                 </android.support.constraint.ConstraintLayout>
 
@@ -186,10 +356,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/common_deep_orange"
-                        android:textSize="11sp"
                         android:text="left_leftOf"
-                        app:layout_constraintLeft_toLeftOf="@id/left_target_text"
-                        app:layout_constraintTop_toBottomOf="@id/left_target_text"
+                        android:textSize="11sp"
+                        app:layout_constraintLeft_toLeftOf="@+id/left_target_text"
+                        app:layout_constraintTop_toBottomOf="@+id/left_target_text"
                         />
 
                     <TextView
@@ -197,10 +367,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/common_deep_orange"
-                        android:textSize="11sp"
                         android:text="left_rightOf"
-                        app:layout_constraintLeft_toRightOf="@id/left_target_text"
-                        app:layout_constraintTop_toBottomOf="@id/left_target_text"
+                        android:textSize="11sp"
+                        app:layout_constraintLeft_toRightOf="@+id/left_target_text"
+                        app:layout_constraintTop_toBottomOf="@+id/left_target_text"
                         />
                 </android.support.constraint.ConstraintLayout>
 
@@ -227,10 +397,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/common_deep_orange"
-                        android:textSize="11sp"
                         android:text="right_leftOf"
-                        app:layout_constraintRight_toLeftOf="@id/right_target_text"
-                        app:layout_constraintTop_toBottomOf="@id/right_target_text"
+                        android:textSize="11sp"
+                        app:layout_constraintRight_toLeftOf="@+id/right_target_text"
+                        app:layout_constraintTop_toBottomOf="@+id/right_target_text"
                         />
 
                     <TextView
@@ -238,10 +408,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:background="@color/common_deep_orange"
-                        android:textSize="11sp"
                         android:text="right_rightOf"
-                        app:layout_constraintRight_toRightOf="@id/right_target_text"
-                        app:layout_constraintTop_toBottomOf="@id/right_target_text"
+                        android:textSize="11sp"
+                        app:layout_constraintRight_toRightOf="@+id/right_target_text"
+                        app:layout_constraintTop_toBottomOf="@+id/right_target_text"
                         />
                 </android.support.constraint.ConstraintLayout>
 
@@ -333,7 +503,8 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.2"/>
+                        app:layout_constraintGuide_percent="0.2"
+                        tools:layout_editor_absoluteX="0dp"/>
                 </android.support.constraint.ConstraintLayout>
 
                 <android.support.constraint.ConstraintLayout
