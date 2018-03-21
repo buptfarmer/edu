@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 
 import com.chensiwen.edugame.databinding.ActivityEntranceListBinding;
+import com.chensiwen.edugame.recyclerview.HorizontalRecyclerViewActivity;
 
 public class EntranceListActivity extends BaseAppCompatActivity {
 
@@ -23,6 +24,10 @@ public class EntranceListActivity extends BaseAppCompatActivity {
         }
         public void onClickRxJava(View view) {
             startActivity(new Intent(EntranceListActivity.this, RxJavaExampleActivity.class));
+        }
+
+        public void onClickHorizontalRecyclerView(View view) {
+            startActivity(new Intent(EntranceListActivity.this, HorizontalRecyclerViewActivity.class));
         }
     }
 
