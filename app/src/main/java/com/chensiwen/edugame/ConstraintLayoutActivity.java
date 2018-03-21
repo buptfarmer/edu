@@ -7,7 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.chensiwen.edugame.databinding.ActivityRxjavaExampleBinding;
+import com.chensiwen.edugame.databinding.ActivityConstraintLayoutBinding;
 
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -49,8 +49,8 @@ public class ConstraintLayoutActivity extends BaseAppCompatActivity {
             Observable<String> aOb = Observable.fromArray(urls);
             //mRepeatedOb = Observable.fromCallable(getStringCallable(1));
             //Observable<String> mRepeatedOb = Observable.fromFuture(executor.submit(getStringCallable(1)));
-            binding.rxTest1.append("clicked!");
-            binding.rxTest1.append("\n");
+//            binding.rxTest1.append("clicked!");
+//            binding.rxTest1.append("\n");
             mRepeatedOb.map(new Function<String, UrlModel>() {
                 @Override
                 public UrlModel apply(String s) throws Exception {
@@ -65,9 +65,9 @@ public class ConstraintLayoutActivity extends BaseAppCompatActivity {
         public void onClickTest2(View view) {
             Log.d(TAG, "onClickTest2: ");
             // why this will crash, with java.util.concurrent.ExecutionException: android.view.ViewRootImpl$CalledFromWrongThreadException: Only the original thread that created a view hierarchy can touch its views.
-            mRepeatedOb = Observable.fromFuture(executor.submit(getStringCallable2(2)));
-            binding.rxTest2.append("clicked!");
-            binding.rxTest2.append("\n");
+//            mRepeatedOb = Observable.fromFuture(executor.submit(getStringCallable2(2)));
+//            binding.rxTest2.append("clicked!");
+//            binding.rxTest2.append("\n");
             mRepeatedOb.subscribeOn(Schedulers.newThread())
                     //.observeOn(AndroidSchedulers.mainThread())
                     .subscribe(getObserver());
@@ -84,7 +84,7 @@ public class ConstraintLayoutActivity extends BaseAppCompatActivity {
                     //} catch (Exception e) {
                     //    e.printStackTrace();
                     //}
-                    executor.submit(getStringCallable(3));
+//                    executor.submit(getStringCallable(3));
                 }
             }).start();
         }
@@ -124,53 +124,13 @@ public class ConstraintLayoutActivity extends BaseAppCompatActivity {
         Observable<Long> ob3 = Observable.timer(1, TimeUnit.SECONDS);
     }
 
-    private Callable<String> getStringCallable(final int index) {
-        binding.rxTest1.append("getStringCallable!");
-        binding.rxTest1.append("\n");
-        return new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                binding.rxTest1.append("call!");
-                //try {
-                //    Thread.sleep(500);
-                //}catch (InterruptedException e) {
-                //    e.printStackTrace();
-                //}
-                binding.rxTest1.append("" + Thread.currentThread().getId());
-                binding.rxTest1.append("\n");
-                binding.rxTest1.setText(binding.rxTest1.getText() + "set text \n");
-                return String.valueOf(index);
-            }
-        };
-    }
-
-    private Callable<String> getStringCallable2(final int index) {
-        binding.rxTest2.append("getStringCallable!");
-        binding.rxTest2.append("\n");
-        return new Callable<String>() {
-            @Override
-            public String call() throws Exception {
-                binding.rxTest2.append("call!");
-                try {
-                    Thread.sleep(500);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-                binding.rxTest2.append("" + Thread.currentThread().getId());
-                binding.rxTest2.append("\n");
-                binding.rxTest2.setText(binding.rxTest2.getText() + "set text \n");
-                return String.valueOf(index);
-            }
-        };
-    }
-
-    private ActivityRxjavaExampleBinding binding;
+    private ActivityConstraintLayoutBinding binding;
     private ExecutorService executor = Executors.newSingleThreadExecutor();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_rxjava_example, null, false);
+        binding = DataBindingUtil.inflate(LayoutInflater.from(this), R.layout.activity_constraint_layout, null, false);
         setContentView(binding.getRoot());
         Toolbar toolbar = binding.toolbar;
         setSupportActionBar(toolbar);
@@ -206,32 +166,32 @@ public class ConstraintLayoutActivity extends BaseAppCompatActivity {
         return new Observer<String>() {
             @Override
             public void onSubscribe(Disposable d) {
-                binding.rxTest1.append("onSubscribe!");
-                binding.rxTest1.append("" + Thread.currentThread().getId());
-                binding.rxTest1.append("\n");
+//                binding.rxTest1.append("onSubscribe!");
+//                binding.rxTest1.append("" + Thread.currentThread().getId());
+//                binding.rxTest1.append("\n");
             }
 
             @Override
             public void onNext(String value) {
 
-                binding.rxTest1.append("onNext!" + value);
-                binding.rxTest1.append("" + Thread.currentThread().getId());
-                binding.rxTest1.append("\n");
+//                binding.rxTest1.append("onNext!" + value);
+//                binding.rxTest1.append("" + Thread.currentThread().getId());
+//                binding.rxTest1.append("\n");
             }
 
             @Override
             public void onError(Throwable e) {
                 e.printStackTrace();
-                binding.rxTest1.append("onError!");
-                binding.rxTest1.append("" + Thread.currentThread().getId());
-                binding.rxTest1.append("\n");
+//                binding.rxTest1.append("onError!");
+//                binding.rxTest1.append("" + Thread.currentThread().getId());
+//                binding.rxTest1.append("\n");
             }
 
             @Override
             public void onComplete() {
-                binding.rxTest1.append("onComplete!");
-                binding.rxTest1.append("" + Thread.currentThread().getId());
-                binding.rxTest1.append("\n");
+//                binding.rxTest1.append("onComplete!");
+//                binding.rxTest1.append("" + Thread.currentThread().getId());
+//                binding.rxTest1.append("\n");
 
             }
         };

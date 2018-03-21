@@ -8,7 +8,7 @@
 
         <variable
             name="handlers"
-            type="com.chensiwen.edugame.RxJavaExampleActivity.BindHanlders"/>
+            type="com.chensiwen.edugame.ConstraintLayoutActivity.BindHanlders"/>
     </data>
 
     <android.support.design.widget.CoordinatorLayout
@@ -505,6 +505,13 @@
                     android:layout_height="wrap_content"
                     android:background="@color/common_blue_grey">
 
+                    <android.support.constraint.Guideline
+                        android:id="@+id/vertical_20_percent"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.2"
+                        tools:layout_editor_absoluteX="0dp"/>
 
                     <TextView
                         android:layout_width="wrap_content"
@@ -515,13 +522,6 @@
                         app:layout_constraintTop_toTopOf="parent"
                         />
 
-                    <android.support.constraint.Guideline
-                        android:id="@+id/vertical_20_percent"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.2"
-                        tools:layout_editor_absoluteX="0dp"/>
                 </android.support.constraint.ConstraintLayout>
 
                 <android.support.constraint.ConstraintLayout
