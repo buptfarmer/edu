@@ -79,6 +79,7 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
      * rv是否需要第二次滚动
      */
     private boolean mNeedToMove = false;
+
     private void moveToPosition(int index) {
         Log.d(TAG, "moveToPosition() called with: index = [" + index + "]");
         //获取当前recycleView屏幕可见的第一项和最后一项的Position
@@ -99,6 +100,7 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
             mNeedToMove = true;
         }
     }
+
     private LinearLayoutManager mLayoutManager;
 
     @Override
@@ -139,14 +141,24 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
                 }
                 int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
                 int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
-                View view = mLayoutManager.findViewByPosition(firstVisibleItemPosition);
-                Log.d(TAG, "onScrolled: firstVisibleView:" + view.toString());
-                int viewCenter = view.getLeft() + (view.getRight() - view.getLeft()) / 2;
-                int middle = mRecyclerView.getWidth() / 2;
-                float scale = 1f * Math.abs(middle - viewCenter) / middle / 2 + 0.5f; // [0.5, 1]
-                Log.d(TAG, "onScrolled: viewCenter:" + viewCenter + ", middle :" + middle + ", scale:" + scale);
-                view.setScaleX(scale);
-                view.setScaleY(scale);
+                for (int i = firstVisibleItemPosition; i <= lastVisibleItemPosition; i++) {
+                    View view = mLayoutManager.findViewByPosition(i);
+                    Log.d(TAG, "onScrolled: firstVisibleView:" + view.toString());
+                    int viewCenter = view.getLeft() + (view.getRight() - view.getLeft()) / 2;
+                    int middle = mRecyclerView.getWidth() / 2;
+                    float scaleFactor = 0.3f;
+                    if (viewCenter < middle) {
+                        float scale = 1f * viewCenter / middle * scaleFactor + (1 - scaleFactor); // [0.7, 1]
+                        Log.d(TAG, "onScrolled: viewCenter:" + viewCenter + ", middle :" + middle + ", scale:" + scale);
+                        view.setScaleX(scale);
+                        view.setScaleY(scale);
+                    } else {
+                        float scale = 1f * (2 * middle - viewCenter) / middle * scaleFactor + (1 - scaleFactor); // [0.7, 1]
+                        Log.d(TAG, "onScrolled: viewCenter:" + viewCenter + ", middle :" + middle + ", scale:" + scale);
+                        view.setScaleX(scale);
+                        view.setScaleY(scale);
+                    }
+                }
 
             }
         });
