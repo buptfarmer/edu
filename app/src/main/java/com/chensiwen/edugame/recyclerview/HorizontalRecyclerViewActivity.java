@@ -1,21 +1,17 @@
 package com.chensiwen.edugame.recyclerview;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.os.Handler;
 import android.os.Looper;
 import android.os.Message;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewPropertyAnimator;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
@@ -23,9 +19,6 @@ import android.view.animation.OvershootInterpolator;
 import android.widget.TextView;
 
 import com.chensiwen.edugame.BaseAppCompatActivity;
-import com.chensiwen.edugame.EduApplication;
-import com.chensiwen.edugame.ExplodeItemAnimator;
-import com.chensiwen.edugame.NumbersActivityFragment;
 import com.chensiwen.edugame.R;
 import com.chensiwen.edugame.StatsConstants;
 import com.chensiwen.edugame.particle.ExplosionField;
@@ -65,9 +58,10 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
     public boolean handleMessage(Message msg) {
         if (MSG_EXPLOSION_DONE == msg.what) {
             int position = msg.arg1;
-            mContentList.remove(position);
-            mRecyclerAdapter.notifyItemRemoved(position);
-            mRecyclerAdapter.notifyItemRangeChanged(position, mRecyclerAdapter.getItemCount());
+//            mContentList.remove(position);
+//            mRecyclerAdapter.notifyItemRemoved(position);
+//            mRecyclerAdapter.notifyItemRangeChanged(position, mRecyclerAdapter.getItemCount());
+            moveToPosition(position);
         }
         return true;
     }
@@ -75,6 +69,38 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
     private RecordRecyclerAdapter mRecyclerAdapter;
     private RecyclerView mRecyclerView;
     private ArrayList<String> mContentList = new ArrayList<>();
+
+
+    /**
+     * 用户点击的分类在rv的位置
+     */
+    private int mIndex;
+    /**
+     * rv是否需要第二次滚动
+     */
+    private boolean mNeedToMove = false;
+    private void moveToPosition(int index) {
+        Log.d(TAG, "moveToPosition() called with: index = [" + index + "]");
+        //获取当前recycleView屏幕可见的第一项和最后一项的Position
+        int firstItem = mLayoutManager.findFirstVisibleItemPosition();
+        int lastItem = mLayoutManager.findLastVisibleItemPosition();
+        //然后区分情况
+        if (index <= firstItem) {
+            //当要置顶的项在当前显示的第一个项的前面时
+            mRecyclerView.scrollToPosition(index);
+        } else if (index <= lastItem) {
+            //当要置顶的项已经在屏幕上显示时，计算它离屏幕原点的距离
+            int top = mRecyclerView.getChildAt(index - firstItem).getTop();
+            mRecyclerView.scrollBy(0, top);
+        } else {
+            //当要置顶的项在当前显示的最后一项的后面时
+            mRecyclerView.scrollToPosition(index);
+            //记录当前需要在RecyclerView滚动监听里面继续第二次滚动
+            mNeedToMove = true;
+        }
+    }
+    private LinearLayoutManager mLayoutManager;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -82,10 +108,65 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
         setContentView(R.layout.activity_horizontal_recycler_view);
 
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        mRecyclerView.setLayoutManager(layoutManager);
+        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerAdapter = new RecordRecyclerAdapter(this, mContentList, mHandler);
         mRecyclerView.setAdapter(mRecyclerAdapter);
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                Log.d(TAG, "onScrollStateChanged() called with: recyclerView = [" + recyclerView + "], newState = [" + newState + "]");
+            }
+
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+                Log.d(TAG, "onScrolled() called with: recyclerView = [" + recyclerView + "], dx = [" + dx + "], dy = [" + dy + "]");
+                //在这里进行第二次滚动（最后的距离）
+                if (mNeedToMove) {
+                    mNeedToMove = false;
+                    //获取要置顶的项在当前屏幕的位置，mIndex是记录的要置顶项在RecyclerView中的位置
+                    int n = mIndex - mLayoutManager.findFirstVisibleItemPosition();
+                    if (0 <= n && n < mRecyclerView.getChildCount()) {
+                        //获取要置顶的项顶部离RecyclerView顶部的距离
+                        int top = mRecyclerView.getChildAt(n).getTop();
+                        int left = mRecyclerView.getChildAt(n).getLeft();
+
+                        //最后的移动
+                        mRecyclerView.scrollBy(0, top);
+                    }
+                }
+                int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
+                int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
+                View view = mLayoutManager.findViewByPosition(firstVisibleItemPosition);
+                Log.d(TAG, "onScrolled: firstVisibleView:" + view.toString());
+                int viewCenter = view.getLeft() + (view.getRight() - view.getLeft()) / 2;
+                int middle = mRecyclerView.getWidth() / 2;
+                float scale = 1f * Math.abs(middle - viewCenter) / middle / 2 + 0.5f; // [0.5, 1]
+                Log.d(TAG, "onScrolled: viewCenter:" + viewCenter + ", middle :" + middle + ", scale:" + scale);
+                view.setScaleX(scale);
+                view.setScaleY(scale);
+
+            }
+        });
+        mRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+//                Log.d(TAG, "onInterceptTouchEvent() called with: rv = [" + rv + "], e = [" + e + "]");
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+//                Log.d(TAG, "onTouchEvent() called with: rv = [" + rv + "], e = [" + e + "]");
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+//                Log.d(TAG, "onRequestDisallowInterceptTouchEvent() called with: disallowIntercept = [" + disallowIntercept + "]");
+            }
+        });
 //        RecyclerView.ItemAnimator itemAnimator = new ExplodeItemAnimator(this);
 //        itemAnimator.setMoveDuration(1000);
 //        itemAnimator.setChangeDuration(1000);
