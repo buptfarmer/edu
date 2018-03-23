@@ -26,6 +26,7 @@ import com.chensiwen.edugame.particle.factory.FallingParticleFactory;
 import com.umeng.analytics.MobclickAgent;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implements Handler.Callback {
@@ -58,10 +59,10 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
     public boolean handleMessage(Message msg) {
         if (MSG_EXPLOSION_DONE == msg.what) {
             int position = msg.arg1;
-//            mContentList.remove(position);
-//            mRecyclerAdapter.notifyItemRemoved(position);
-//            mRecyclerAdapter.notifyItemRangeChanged(position, mRecyclerAdapter.getItemCount());
-            moveToPosition(position);
+            mContentList.remove(position);
+            mRecyclerAdapter.notifyItemRemoved(position);
+            mRecyclerAdapter.notifyItemRangeChanged(position, mRecyclerAdapter.getItemCount());
+//            moveToPosition(position);
         }
         return true;
     }
@@ -103,6 +104,26 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
 
     private LinearLayoutManager mLayoutManager;
 
+    private float getScaleFromViewCenter(View view) {
+        Log.d(TAG, "onScrolled: firstVisibleView:" + view.toString());
+        int viewCenter = view.getLeft() + (view.getRight() - view.getLeft()) / 2;
+        int middle = mRecyclerView.getWidth() / 2;
+        float scaleFactor = 0.3f;
+        if (viewCenter < middle) {
+            float scale = 1f * viewCenter / middle * scaleFactor + (1 - scaleFactor); // [0.7, 1]
+            Log.d(TAG, "onScrolled: viewCenter:" + viewCenter + ", middle :" + middle + ", scale:" + scale);
+            view.setScaleX(scale);
+            view.setScaleY(scale);
+            return scale;
+        } else {
+            float scale = 1f * (2 * middle - viewCenter) / middle * scaleFactor + (1 - scaleFactor); // [0.7, 1]
+            Log.d(TAG, "onScrolled: viewCenter:" + viewCenter + ", middle :" + middle + ", scale:" + scale);
+            view.setScaleX(scale);
+            view.setScaleY(scale);
+            return scale;
+        }
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,7 +133,7 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
         mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
         mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
         mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerAdapter = new RecordRecyclerAdapter(this, mContentList, mHandler);
+        mRecyclerAdapter = new RecordRecyclerAdapter(this, mRecyclerView, mContentList, mHandler);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -144,20 +165,9 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
                 for (int i = firstVisibleItemPosition; i <= lastVisibleItemPosition; i++) {
                     View view = mLayoutManager.findViewByPosition(i);
                     Log.d(TAG, "onScrolled: firstVisibleView:" + view.toString());
-                    int viewCenter = view.getLeft() + (view.getRight() - view.getLeft()) / 2;
-                    int middle = mRecyclerView.getWidth() / 2;
-                    float scaleFactor = 0.3f;
-                    if (viewCenter < middle) {
-                        float scale = 1f * viewCenter / middle * scaleFactor + (1 - scaleFactor); // [0.7, 1]
-                        Log.d(TAG, "onScrolled: viewCenter:" + viewCenter + ", middle :" + middle + ", scale:" + scale);
-                        view.setScaleX(scale);
-                        view.setScaleY(scale);
-                    } else {
-                        float scale = 1f * (2 * middle - viewCenter) / middle * scaleFactor + (1 - scaleFactor); // [0.7, 1]
-                        Log.d(TAG, "onScrolled: viewCenter:" + viewCenter + ", middle :" + middle + ", scale:" + scale);
-                        view.setScaleX(scale);
-                        view.setScaleY(scale);
-                    }
+                    float scale = getScaleFromViewCenter(view);
+                    view.setScaleX(scale);
+                    view.setScaleY(scale);
                 }
 
             }
@@ -184,16 +194,27 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
 //        itemAnimator.setChangeDuration(1000);
 //        itemAnimator.setRemoveDuration(1000);
 //        mRecyclerView.setItemAnimator(itemAnimator);
+        long duration = 1000;
+        RecyclerView.ItemAnimator itemAnimator = new ZoomItemAnimator();
+        itemAnimator.setAddDuration(duration);
+        itemAnimator.setChangeDuration(duration);
+        itemAnimator.setRemoveDuration(duration);
+        itemAnimator.setMoveDuration(duration);
+        mRecyclerView.setItemAnimator(itemAnimator);
+
 
 
         // start animation
-        Animation animation = AnimationUtils.loadAnimation(this, R.anim.layout_item_anim);
-        animation.setInterpolator(new OvershootInterpolator());
-        LayoutAnimationController layoutAnimationController = new LayoutAnimationController(animation);
-        //layoutAnimationController.setInterpolator(new OvershootInterpolator());
-        layoutAnimationController.setDelay(0.1f);
-        layoutAnimationController.setOrder(LayoutAnimationController.ORDER_RANDOM);
-        mRecyclerView.setLayoutAnimation(layoutAnimationController);
+        boolean showStartAnimation = false;
+        if (showStartAnimation) {
+            Animation animation = AnimationUtils.loadAnimation(this, R.anim.layout_item_anim);
+            animation.setInterpolator(new OvershootInterpolator());
+            LayoutAnimationController layoutAnimationController = new LayoutAnimationController(animation);
+            //layoutAnimationController.setInterpolator(new OvershootInterpolator());
+            layoutAnimationController.setDelay(0.1f);
+            layoutAnimationController.setOrder(LayoutAnimationController.ORDER_RANDOM);
+            mRecyclerView.setLayoutAnimation(layoutAnimationController);
+        }
     }
 
 
@@ -207,9 +228,11 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
         private ArrayList<String> mList;
         private BaseAppCompatActivity context;
         private Handler mHandler;
+        private RecyclerView mOwnRecyclerView;
 
-        public RecordRecyclerAdapter(BaseAppCompatActivity context, ArrayList<String> lists, Handler handler) {
+        public RecordRecyclerAdapter(BaseAppCompatActivity context, RecyclerView ownRecyclerView, ArrayList<String> lists, Handler handler) {
             this.context = context;
+            this.mOwnRecyclerView = ownRecyclerView;
             this.mList = lists;
             this.mHandler = handler;
         }
@@ -217,13 +240,13 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
         @Override
         public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             CardView view = (CardView) LayoutInflater.from(context).inflate(R.layout.horizontal_recyelerview_item, parent, false);
-            MyViewHolder viewHolder = new MyViewHolder(context, view);
+            MyViewHolder viewHolder = new MyViewHolder(context, mOwnRecyclerView, view);
             return viewHolder;
         }
 
         @Override
         public void onBindViewHolder(final MyViewHolder holder, int position) {
-            holder.update(mList.get(position), position, mHandler);
+            holder.update(mList, position, mHandler);
         }
 
         @Override
@@ -233,38 +256,47 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
     }
 
 
-    static class MyViewHolder extends RecyclerView.ViewHolder {
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
         public CardView mRootView;
         public TextView mContent;
         private BaseAppCompatActivity mActivity;
         private ExplosionField mExplosion;
         private Random mRandom;
+        private RecyclerView mOwnRecyclerView;
 
-        public MyViewHolder(BaseAppCompatActivity context, CardView itemView) {
+        public MyViewHolder(BaseAppCompatActivity context, RecyclerView ownRecyclerView, CardView itemView) {
             super(itemView);
             mActivity = context;
+            this.mOwnRecyclerView = ownRecyclerView;
             mRootView = itemView;
             mContent = (TextView) itemView.findViewById(R.id.content);
             mExplosion = new ExplosionField(mActivity, new FallingParticleFactory());
         }
 
+        public RecyclerView getOwnRecyclerView() {
+            return this.mOwnRecyclerView;
+        }
+
         private int getRandomColor() {
             return mActivity.getResources().getColor(COLORS[mRandom.nextInt(COLORS.length)]);
         }
+        private int getBackgroundColor(int position) {
+            return mActivity.getResources().getColor(COLORS[position % COLORS.length]);
+        }
 
-        public void update(final String value, final int position, final Handler handler) {
-            Log.i(TAG, String.format("update: value:%s, position:%d", value, position));
+        public void update(final List<String > list, final int position, final Handler handler) {
+            Log.i(TAG, String.format("update: value:%s, position:%d", list.get(position), position));
 
             mRandom = new Random(position);
-            mContent.setText(value);
-            mRootView.setBackgroundColor(getRandomColor());
+            mContent.setText(list.get(position));
+            mRootView.setBackgroundColor(getBackgroundColor(list.indexOf(list.get(position))));
             mRootView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (handler != null) {
                         handler.obtainMessage(MSG_EXPLOSION_DONE, position, 0).sendToTarget();
                     }
-                    MobclickAgent.onEvent(mActivity, StatsConstants.NUMBERS_CLICK_PREFIX + value);
+                    MobclickAgent.onEvent(mActivity, StatsConstants.NUMBERS_CLICK_PREFIX + list.get(position));
                 }
             });
 
