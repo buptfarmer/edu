@@ -18,6 +18,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
 import android.view.animation.OvershootInterpolator;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.chensiwen.edugame.BaseAppCompatActivity;
 import com.chensiwen.edugame.R;
@@ -105,6 +106,10 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
         }
     }
 
+    private interface OnItemScorllChangeListener {
+        void onItemScrollChange(int position);
+    }
+
     private LinearLayoutManager mLayoutManager;
     private static final float sScaleFactor = 0.2f;
 
@@ -145,6 +150,7 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
         mRecyclerAdapter = new RecordRecyclerAdapter(this, mRecyclerView, mContentList, mHandler);
         mRecyclerView.setAdapter(mRecyclerAdapter);
         mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            private int mLastPosition = -1;
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
@@ -152,35 +158,26 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
                 if (newState != RecyclerView.SCROLL_STATE_IDLE) {
                     return;
                 }
-//                int position = mLayoutManager.findFirstCompletelyVisibleItemPosition();
-                int position = 0;
-                Log.d(TAG, "onScrollStateChanged: position:" + position);
-                View visibleView = mLayoutManager.getChildAt(position);
-//                if (visibleView == null) {
-//                    position = mLayoutManager.findFirstVisibleItemPosition();
-//                    Log.d(TAG, "onScrollStateChanged: position:" + position);
-//                    visibleView = mLayoutManager.findViewByPosition(position);
-//                }
-//                {
-//                    if (visibleView == null) {
-//                        Log.d(TAG, "onScrollStateChanged: visibleView == null.");
-//                        return;
-//                    }
-//                    int viewCenter = visibleView.getLeft() + (visibleView.getRight() - visibleView.getLeft()) / 2;
-//                    Log.d(TAG, "onScrollStateChanged: viewCenter:" + viewCenter);
-//                    if (viewCenter < 0) {
-//                        visibleView = mLayoutManager.getChildAt(position + 1);
-//                        viewCenter = (visibleView.getLeft() + visibleView.getRight()) / 2;
-//                        Log.d(TAG, "onScrollStateChanged: viewCenter:" + viewCenter);
-//                    }
-//                    int middle = mRecyclerView.getWidth() / 2;
-//                    Log.d(TAG, "onScrollStateChanged: middle:" + middle);
-//
-//                    int deltaScroll = middle - viewCenter;
-//                    int currentScrollX = mRecyclerView.getScrollX();
-//                    Log.d(TAG, "onScrollStateChanged: currentScrollX:" + currentScrollX);
-//                    mRecyclerView.smoothScrollBy(-deltaScroll, 0);
-//                }
+                {
+                    // 松手后自动滑动到中间位置
+                    int position = 0;
+                    Log.d(TAG, "onScrollStateChanged: position:" + position);
+                    View visibleView = mLayoutManager.getChildAt(position);
+                    int viewCenter = visibleView.getLeft() + (visibleView.getRight() - visibleView.getLeft()) / 2;
+                    Log.d(TAG, "onScrollStateChanged: viewCenter:" + viewCenter);
+                    if (viewCenter < 0) {
+                        visibleView = mLayoutManager.getChildAt(position + 1);
+                        viewCenter = (visibleView.getLeft() + visibleView.getRight()) / 2;
+                        Log.d(TAG, "onScrollStateChanged: viewCenter:" + viewCenter);
+                    }
+                    int middle = mRecyclerView.getWidth() / 2;
+                    Log.d(TAG, "onScrollStateChanged: middle:" + middle);
+
+                    int deltaScroll = middle - viewCenter;
+                    int currentScrollX = mRecyclerView.getScrollX();
+                    Log.d(TAG, "onScrollStateChanged: currentScrollX:" + currentScrollX);
+                    mRecyclerView.smoothScrollBy(-deltaScroll, 0);
+                }
             }
 
             @Override
@@ -197,6 +194,27 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
                         float scale = getScaleFromViewCenter(view);
                         view.setScaleX(scale);
                         view.setScaleY(scale);
+                    }
+                }
+
+                {
+                    // 滑动时item 的变化
+                    int start = mLayoutManager.findFirstVisibleItemPosition();
+                    int end = mLayoutManager.findLastVisibleItemPosition();
+                    int offset = 0;
+                    for (int index = 0; index <= end - start; index++) {
+                        View visibleView = mLayoutManager.getChildAt(index);
+                        int viewCenter = visibleView.getLeft() + (visibleView.getRight() - visibleView.getLeft()) / 2;
+                        if (viewCenter > 0) {
+                            offset = index;
+                            break;
+                        }
+                    }
+                    int currentPosition = start + offset;
+                    if (mLastPosition != currentPosition) {
+                        mLastPosition = currentPosition;
+                        Toast.makeText(HorizontalRecyclerViewActivity.this, "lastPosition:" + mLastPosition, Toast.LENGTH_SHORT).show();
+                        Log.d(TAG, "onScrollStateChanged: item changed:"+ mLastPosition);
                     }
                 }
 
