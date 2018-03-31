@@ -384,7 +384,7 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
 
         public void update(final List<String > list, final int position, final Handler handler) {
             Log.i(TAG, String.format("update: value:%s, position:%d", list.get(position), position));
-
+            Log.d(TAG, "update: mOwnRecyclerView.getWidth():" + mOwnRecyclerView.getWidth());
             mRandom = new Random(position);
             mContent.setText(list.get(position));
             mRootView.setBackgroundColor(getBackgroundColor(list.indexOf(list.get(position))));
@@ -398,6 +398,25 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
                 }
             });
 
+            // 判断是否是第一个、或者最后一个，增加相应的margin
+            float cardWith = mActivity.getResources().getDimension(R.dimen.horizontal_card_width);
+            if (position == 0) {
+                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mRootView.getLayoutParams();
+                layoutParams.leftMargin = (int) (cardWith * 0.2f);
+                layoutParams.rightMargin = 0;
+                mRootView.setLayoutParams(layoutParams);
+            } else if (position == list.size() - 1) {
+                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mRootView.getLayoutParams();
+                layoutParams.leftMargin = 0;
+                layoutParams.rightMargin = (int) (cardWith * 0.2f);
+                mRootView.setLayoutParams(layoutParams);
+            } else {
+                ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mRootView.getLayoutParams();
+                layoutParams.leftMargin = 0;
+                layoutParams.rightMargin = 0;
+                mRootView.setLayoutParams(layoutParams);
+            }
+            mRootView.requestLayout();
 //            ViewPropertyAnimator animator = mRootView.animate().alpha(1f).scaleX(1f).scaleY(1f).setDuration(1000);
 //            animator.setListener(new AnimatorListenerAdapter() {
 //                @Override
