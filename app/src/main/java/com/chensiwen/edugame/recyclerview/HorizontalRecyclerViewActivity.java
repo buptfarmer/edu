@@ -8,6 +8,7 @@ import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.DragEvent;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -28,6 +29,8 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import static android.support.v7.widget.RecyclerView.SCROLL_STATE_SETTLING;
 
 public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implements Handler.Callback {
     private static final String TAG = "HorizontalRecyclerViewA";
@@ -103,12 +106,18 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
     }
 
     private LinearLayoutManager mLayoutManager;
+    private static final float sScaleFactor = 0.2f;
 
+    /**
+     * 根据view 的位置计算需要缩放的大小。XY 缩放比例一样
+     * @param view
+     * @return
+     */
     private float getScaleFromViewCenter(View view) {
         Log.d(TAG, "onScrolled: firstVisibleView:" + view.toString());
         int viewCenter = view.getLeft() + (view.getRight() - view.getLeft()) / 2;
         int middle = mRecyclerView.getWidth() / 2;
-        float scaleFactor = 0.3f;
+        float scaleFactor = sScaleFactor;
         if (viewCenter < middle) {
             float scale = 1f * viewCenter / middle * scaleFactor + (1 - scaleFactor); // [0.7, 1]
             Log.d(TAG, "onScrolled: viewCenter:" + viewCenter + ", middle :" + middle + ", scale:" + scale);
@@ -140,34 +149,55 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 Log.d(TAG, "onScrollStateChanged() called with: recyclerView = [" + recyclerView + "], newState = [" + newState + "]");
+                if (newState != RecyclerView.SCROLL_STATE_IDLE) {
+                    return;
+                }
+//                int position = mLayoutManager.findFirstCompletelyVisibleItemPosition();
+                int position = 0;
+                Log.d(TAG, "onScrollStateChanged: position:" + position);
+                View visibleView = mLayoutManager.getChildAt(position);
+//                if (visibleView == null) {
+//                    position = mLayoutManager.findFirstVisibleItemPosition();
+//                    Log.d(TAG, "onScrollStateChanged: position:" + position);
+//                    visibleView = mLayoutManager.findViewByPosition(position);
+//                }
+//                {
+//                    if (visibleView == null) {
+//                        Log.d(TAG, "onScrollStateChanged: visibleView == null.");
+//                        return;
+//                    }
+//                    int viewCenter = visibleView.getLeft() + (visibleView.getRight() - visibleView.getLeft()) / 2;
+//                    Log.d(TAG, "onScrollStateChanged: viewCenter:" + viewCenter);
+//                    if (viewCenter < 0) {
+//                        visibleView = mLayoutManager.getChildAt(position + 1);
+//                        viewCenter = (visibleView.getLeft() + visibleView.getRight()) / 2;
+//                        Log.d(TAG, "onScrollStateChanged: viewCenter:" + viewCenter);
+//                    }
+//                    int middle = mRecyclerView.getWidth() / 2;
+//                    Log.d(TAG, "onScrollStateChanged: middle:" + middle);
+//
+//                    int deltaScroll = middle - viewCenter;
+//                    int currentScrollX = mRecyclerView.getScrollX();
+//                    Log.d(TAG, "onScrollStateChanged: currentScrollX:" + currentScrollX);
+//                    mRecyclerView.smoothScrollBy(-deltaScroll, 0);
+//                }
             }
 
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
                 Log.d(TAG, "onScrolled() called with: recyclerView = [" + recyclerView + "], dx = [" + dx + "], dy = [" + dy + "]");
-                //在这里进行第二次滚动（最后的距离）
-                if (mNeedToMove) {
-                    mNeedToMove = false;
-                    //获取要置顶的项在当前屏幕的位置，mIndex是记录的要置顶项在RecyclerView中的位置
-                    int n = mIndex - mLayoutManager.findFirstVisibleItemPosition();
-                    if (0 <= n && n < mRecyclerView.getChildCount()) {
-                        //获取要置顶的项顶部离RecyclerView顶部的距离
-                        int top = mRecyclerView.getChildAt(n).getTop();
-                        int left = mRecyclerView.getChildAt(n).getLeft();
-
-                        //最后的移动
-                        mRecyclerView.scrollBy(0, top);
+                {
+                    // 控制滑动过程中的缩放
+                    int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
+                    int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
+                    for (int i = firstVisibleItemPosition; i <= lastVisibleItemPosition; i++) {
+                        View view = mLayoutManager.findViewByPosition(i);
+                        Log.d(TAG, "onScrolled: firstVisibleView:" + view.toString());
+                        float scale = getScaleFromViewCenter(view);
+                        view.setScaleX(scale);
+                        view.setScaleY(scale);
                     }
-                }
-                int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
-                int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
-                for (int i = firstVisibleItemPosition; i <= lastVisibleItemPosition; i++) {
-                    View view = mLayoutManager.findViewByPosition(i);
-                    Log.d(TAG, "onScrolled: firstVisibleView:" + view.toString());
-                    float scale = getScaleFromViewCenter(view);
-                    view.setScaleX(scale);
-                    view.setScaleY(scale);
                 }
 
             }
@@ -187,6 +217,54 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
             @Override
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 //                Log.d(TAG, "onRequestDisallowInterceptTouchEvent() called with: disallowIntercept = [" + disallowIntercept + "]");
+            }
+        });
+
+        mRecyclerView.setOnFlingListener(new RecyclerView.OnFlingListener() {
+            @Override
+            public boolean onFling(int velocityX, int velocityY) {
+
+                Log.d(TAG, "onFling() called with: velocityX = [" + velocityX + "], velocityY = [" + velocityY + "]" + ", state:" + mRecyclerView.getScrollState());
+                if (mRecyclerView.getScrollState() == SCROLL_STATE_SETTLING) {
+                    Log.d(TAG, "onFling: scroll state:SCROLL_STATE_SETTLING");
+                    return true;
+                }
+                int minFlingVelocity = mRecyclerView.getMinFlingVelocity();
+                if (Math.abs(velocityX) > minFlingVelocity) {
+                    int vel = velocityX > 0 ? Math.min(velocityX, 2500) : Math.max(velocityX, -2500);
+                    Log.d(TAG, "onFling: velocity result:" + vel);
+                    {
+                        if (vel > 0) {
+                            // 手向左滑动，卡片向左滑动，展示下一个右边的卡片
+                            int position = 0;
+                            View visibleView = mLayoutManager.getChildAt(position);
+                            int viewCenter = visibleView.getLeft() + (visibleView.getRight() - visibleView.getLeft()) / 2;
+
+                            int middle = mRecyclerView.getWidth() / 2;
+                            int distance = viewCenter + visibleView.getWidth() - middle;
+                            mRecyclerView.smoothScrollBy(distance, 0);
+                        } else {
+                            // 手向右边滑动，卡片向右边滑动，展示下一个左边的卡片
+
+                            int position = 0;
+                            View visibleView = mLayoutManager.getChildAt(position);
+                            int viewCenter = visibleView.getLeft() + (visibleView.getRight() - visibleView.getLeft()) / 2;
+
+                            int middle = mRecyclerView.getWidth() / 2;
+                            int distance = middle - viewCenter;
+                            mRecyclerView.smoothScrollBy(-distance, 0);
+                        }
+                    }
+                    return true;
+                }
+                return false;
+            }
+        });
+        mRecyclerView.setOnDragListener(new View.OnDragListener() {
+            @Override
+            public boolean onDrag(View v, DragEvent event) {
+                Log.d(TAG, "onDrag() called with: v = [" + v + "], event = [" + event + "]");
+                return false;
             }
         });
 //        RecyclerView.ItemAnimator itemAnimator = new ExplodeItemAnimator(this);
@@ -215,6 +293,26 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
             layoutAnimationController.setOrder(LayoutAnimationController.ORDER_RANDOM);
             mRecyclerView.setLayoutAnimation(layoutAnimationController);
         }
+
+        findViewById(R.id.prev).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currentScrollX = mRecyclerView.getScrollX();
+
+                Log.d(TAG, "onScrollStateChanged: currentScrollX:" + currentScrollX);
+                int deltaScroll = (int) getResources().getDimension(R.dimen.horizontal_card_width);
+                mRecyclerView.smoothScrollBy(-deltaScroll, 0);
+            }
+        });
+        findViewById(R.id.next).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int currentScrollX = mRecyclerView.getScrollX();
+                int deltaScroll = (int) getResources().getDimension(R.dimen.horizontal_card_width);
+                Log.d(TAG, "onScrollStateChanged: currentScrollX:" + currentScrollX);
+                mRecyclerView.smoothScrollBy(deltaScroll, 0);
+            }
+        });
     }
 
 

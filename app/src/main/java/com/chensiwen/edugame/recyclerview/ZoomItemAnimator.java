@@ -259,7 +259,7 @@ public class ZoomItemAnimator extends SimpleItemAnimator {
         }
         int viewCenter = toX + (view.getRight() - view.getLeft()) / 2;
         int middle = parentWidth / 2;
-        float scaleFactor = 0.3f;
+        float scaleFactor = 0.2f;
         if (viewCenter < middle) {
             float scale = 1f * viewCenter / middle * scaleFactor + (1 - scaleFactor); // [0.7, 1]
             return scale;
