@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.View;
 
+import com.chensiwen.edugame.chain.ChainActivity;
 import com.chensiwen.edugame.databinding.ActivityEntranceListBinding;
 import com.chensiwen.edugame.recyclerview.HorizontalRecyclerViewActivity;
 
@@ -28,6 +29,10 @@ public class EntranceListActivity extends BaseAppCompatActivity {
 
         public void onClickHorizontalRecyclerView(View view) {
             startActivity(new Intent(EntranceListActivity.this, HorizontalRecyclerViewActivity.class));
+        }
+
+        public void onClicChainActivity(View view) {
+            startActivity(new Intent(EntranceListActivity.this, ChainActivity.class));
         }
     }
 

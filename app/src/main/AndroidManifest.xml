@@ -22,7 +22,7 @@
             android:name=".NumbersActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <!-- umeng feedback -->
         <activity
@@ -52,12 +52,15 @@
         <activity
             android:name=".AnimatedVectorDrawableActivity"
             android:label="@string/title_activity_animated_vector_drawable"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".RxJavaExampleActivity"
             android:label="@string/title_activity_rxjava_example"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".recyclerview.HorizontalRecyclerViewActivity"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".recyclerview.HorizontalRecyclerViewActivity" />
+        <activity android:name=".chain.ChainActivity"
+            android:label="@string/title_activity_rxjava_example"
+            />
     </application>
 
 </manifest>

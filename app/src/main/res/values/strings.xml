@@ -16,4 +16,5 @@
     <string name="title_activity_animated_vector_drawable">AnimatedVectorDrawableActivity</string>
     <string name="title_activity_rxjava_example">RxJavaExample</string>
     <string name="title_activity_horizontal_recycler_view">HorizontalRecyclerView</string>
+    <string name="title_activity_chain">ChainActivity</string>
 </resources>
