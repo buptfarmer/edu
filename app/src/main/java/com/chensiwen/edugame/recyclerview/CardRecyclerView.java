@@ -17,6 +17,7 @@ public class CardRecyclerView extends RecyclerView {
         void onItemScrollChange(int position);
     }
 
+    private static final boolean DEBUG = false;
     private static final String TAG = "CardRecyclerView";
     private static final float sScaleFactor = 0.2f;
     private LinearLayoutManager mLayoutManager;
@@ -43,31 +44,49 @@ public class CardRecyclerView extends RecyclerView {
 
         this.addOnScrollListener(new RecyclerView.OnScrollListener() {
             private int mLastPosition = -1;
+
             @Override
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
-                Log.d(TAG, "onScrollStateChanged() called with: recyclerView = [" + recyclerView + "], newState = [" + newState + "]");
+                if (DEBUG) {
+                    Log.d(TAG, "onScrollStateChanged() called with: recyclerView = [" + recyclerView + "], newState = [" + newState + "]");
+                }
                 if (newState != RecyclerView.SCROLL_STATE_IDLE) {
                     return;
                 }
                 {
                     // 松手后自动滑动到中间位置
                     int position = 0;
-                    Log.d(TAG, "onScrollStateChanged: position:" + position);
+
+                    if (DEBUG) {
+                        Log.d(TAG, "onScrollStateChanged: position:" + position);
+                    }
                     View visibleView = mLayoutManager.getChildAt(position);
                     int viewCenter = visibleView.getLeft() + (visibleView.getRight() - visibleView.getLeft()) / 2;
-                    Log.d(TAG, "onScrollStateChanged: viewCenter:" + viewCenter);
+
+                    if (DEBUG) {
+                        Log.d(TAG, "onScrollStateChanged: viewCenter:" + viewCenter);
+                    }
                     if (viewCenter < 0) {
                         visibleView = mLayoutManager.getChildAt(position + 1);
                         viewCenter = (visibleView.getLeft() + visibleView.getRight()) / 2;
-                        Log.d(TAG, "onScrollStateChanged: viewCenter:" + viewCenter);
+
+                        if (DEBUG) {
+                            Log.d(TAG, "onScrollStateChanged: viewCenter:" + viewCenter);
+                        }
                     }
                     int middle = CardRecyclerView.this.getWidth() / 2;
-                    Log.d(TAG, "onScrollStateChanged: middle:" + middle);
+
+                    if (DEBUG) {
+                        Log.d(TAG, "onScrollStateChanged: middle:" + middle);
+                    }
 
                     int deltaScroll = middle - viewCenter;
                     int currentScrollX = CardRecyclerView.this.getScrollX();
-                    Log.d(TAG, "onScrollStateChanged: currentScrollX:" + currentScrollX);
+
+                    if (DEBUG) {
+                        Log.d(TAG, "onScrollStateChanged: currentScrollX:" + currentScrollX);
+                    }
                     CardRecyclerView.this.smoothScrollBy(-deltaScroll, 0);
                 }
             }
@@ -75,14 +94,19 @@ public class CardRecyclerView extends RecyclerView {
             @Override
             public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                 super.onScrolled(recyclerView, dx, dy);
-                Log.d(TAG, "onScrolled() called with: recyclerView = [" + recyclerView + "], dx = [" + dx + "], dy = [" + dy + "]");
+                if (DEBUG) {
+                    Log.d(TAG, "onScrolled() called with: recyclerView = [" + recyclerView + "], dx = [" + dx + "], dy = [" + dy + "]");
+                }
                 {
                     // 控制滑动过程中的缩放
                     int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
                     int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
                     for (int i = firstVisibleItemPosition; i <= lastVisibleItemPosition; i++) {
                         View view = mLayoutManager.findViewByPosition(i);
-                        Log.d(TAG, "onScrolled: firstVisibleView:" + view.toString());
+
+                        if (DEBUG) {
+                            Log.d(TAG, "onScrolled: firstVisibleView:" + view.toString());
+                        }
                         float scale = getScaleFromViewCenter(view);
                         view.setScaleX(scale);
                         view.setScaleY(scale);
@@ -108,7 +132,10 @@ public class CardRecyclerView extends RecyclerView {
                         if (onItemScorllChangeListener != null) {
                             onItemScorllChangeListener.onItemScrollChange(mLastPosition);
                         }
-                        Log.d(TAG, "onScrollStateChanged: item changed:"+ mLastPosition);
+
+                        if (DEBUG) {
+                            Log.d(TAG, "onScrollStateChanged: item changed:" + mLastPosition);
+                        }
                     }
                 }
 
@@ -120,15 +147,23 @@ public class CardRecyclerView extends RecyclerView {
             @Override
             public boolean onFling(int velocityX, int velocityY) {
 
-                Log.d(TAG, "onFling() called with: velocityX = [" + velocityX + "], velocityY = [" + velocityY + "]" + ", state:" + CardRecyclerView.this.getScrollState());
+                if (DEBUG) {
+                    Log.d(TAG, "onFling() called with: velocityX = [" + velocityX + "], velocityY = [" + velocityY + "]" + ", state:" + CardRecyclerView.this.getScrollState());
+                }
                 if (CardRecyclerView.this.getScrollState() == SCROLL_STATE_SETTLING) {
-                    Log.d(TAG, "onFling: scroll state:SCROLL_STATE_SETTLING");
+
+                    if (DEBUG) {
+                        Log.d(TAG, "onFling: scroll state:SCROLL_STATE_SETTLING");
+                    }
                     return true;
                 }
                 int minFlingVelocity = CardRecyclerView.this.getMinFlingVelocity();
                 if (Math.abs(velocityX) > minFlingVelocity) {
                     int vel = velocityX > 0 ? Math.min(velocityX, 2500) : Math.max(velocityX, -2500);
-                    Log.d(TAG, "onFling: velocity result:" + vel);
+
+                    if (DEBUG) {
+                        Log.d(TAG, "onFling: velocity result:" + vel);
+                    }
                     {
                         if (vel > 0) {
                             // 手向左滑动，卡片向左滑动，展示下一个右边的卡片
@@ -168,23 +203,32 @@ public class CardRecyclerView extends RecyclerView {
 
     /**
      * 根据view 的位置计算需要缩放的大小。XY 缩放比例一样
+     *
      * @param view
      * @return
      */
     private float getScaleFromViewCenter(View view) {
-        Log.d(TAG, "onScrolled: firstVisibleView:" + view.toString());
+        if (DEBUG) {
+            Log.d(TAG, "onScrolled: firstVisibleView:" + view.toString());
+        }
         int viewCenter = view.getLeft() + (view.getRight() - view.getLeft()) / 2;
         int middle = CardRecyclerView.this.getWidth() / 2;
         float scaleFactor = sScaleFactor;
         if (viewCenter < middle) {
             float scale = 1f * viewCenter / middle * scaleFactor + (1 - scaleFactor); // [0.7, 1]
-            Log.d(TAG, "onScrolled: viewCenter:" + viewCenter + ", middle :" + middle + ", scale:" + scale);
+
+            if (DEBUG) {
+                Log.d(TAG, "onScrolled: viewCenter:" + viewCenter + ", middle :" + middle + ", scale:" + scale);
+            }
             view.setScaleX(scale);
             view.setScaleY(scale);
             return scale;
         } else {
             float scale = 1f * (2 * middle - viewCenter) / middle * scaleFactor + (1 - scaleFactor); // [0.7, 1]
-            Log.d(TAG, "onScrolled: viewCenter:" + viewCenter + ", middle :" + middle + ", scale:" + scale);
+
+            if (DEBUG) {
+                Log.d(TAG, "onScrolled: viewCenter:" + viewCenter + ", middle :" + middle + ", scale:" + scale);
+            }
             view.setScaleX(scale);
             view.setScaleY(scale);
             return scale;
