@@ -29,11 +29,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * This implementation of {@link RecyclerView.ItemAnimator} provides basic
+ * This implementation of {@link android.support.v7.widget.RecyclerView.ItemAnimator} provides basic
  * animations on remove, add, and move events that happen to the items in
  * a RecyclerView. RecyclerView uses a ZoomItemAnimator by default.
  *
- * @see RecyclerView#setItemAnimator(RecyclerView.ItemAnimator)
+ * @see android.support.v7.widget.RecyclerView#setItemAnimator(android.support.v7.widget.RecyclerView.ItemAnimator)
  */
 public class ZoomItemAnimator extends SimpleItemAnimator {
     private static final boolean DEBUG = false;
@@ -189,7 +189,9 @@ public class ZoomItemAnimator extends SimpleItemAnimator {
 
     @Override
     public boolean animateRemove(final ViewHolder holder) {
-        Log.d(TAG, "animateRemove() called with: holder = [" + holder + "]");
+        if (DEBUG) {
+            Log.d(TAG, "animateRemove() called with: holder = [" + holder + "]");
+        }
         resetAnimation(holder);
         mPendingRemovals.add(holder);
         return true;
@@ -219,7 +221,9 @@ public class ZoomItemAnimator extends SimpleItemAnimator {
 
     @Override
     public boolean animateAdd(final ViewHolder holder) {
-        Log.d(TAG, "animateAdd() called with: holder = [" + holder + "]");
+        if (DEBUG) {
+            Log.d(TAG, "animateAdd() called with: holder = [" + holder + "]");
+        }
         resetAnimation(holder);
         ViewCompat.setAlpha(holder.itemView, 0);
         mPendingAdditions.add(holder);
@@ -271,8 +275,11 @@ public class ZoomItemAnimator extends SimpleItemAnimator {
     @Override
     public boolean animateMove(final ViewHolder holder, int fromX, int fromY,
             int toX, int toY) {
-        Log.d(TAG, "animateMove() called with: holder = [" + holder + "], fromX = [" + fromX + "], fromY = [" + fromY + "], toX = [" + toX + "], toY = [" + toY + "]");
-        Log.d(TAG, "animateMove: scaleX:" + holder.itemView.getScaleX() + ", scaleY:" + holder.itemView.getScaleY());
+
+        if (DEBUG) {
+            Log.d(TAG, "animateMove() called with: holder = [" + holder + "], fromX = [" + fromX + "], fromY = [" + fromY + "], toX = [" + toX + "], toY = [" + toY + "]");
+            Log.d(TAG, "animateMove: scaleX:" + holder.itemView.getScaleX() + ", scaleY:" + holder.itemView.getScaleY());
+        }
         final View view = holder.itemView;
         fromX += ViewCompat.getTranslationX(holder.itemView);
         fromY += ViewCompat.getTranslationY(holder.itemView);
@@ -339,9 +346,11 @@ public class ZoomItemAnimator extends SimpleItemAnimator {
     @Override
     public boolean animateChange(ViewHolder oldHolder, ViewHolder newHolder,
             int fromX, int fromY, int toX, int toY) {
-        Log.d(TAG, "animateChange() called with: oldHolder = [" + oldHolder + "], newHolder = [" + newHolder + "], fromX = [" + fromX + "], fromY = [" + fromY + "], toX = [" + toX + "], toY = [" + toY + "]");
-        Log.d(TAG, "animateChange: old scaleX:" + oldHolder.itemView.getScaleX() + ", scaleY:" + oldHolder.itemView.getScaleY());
-        Log.d(TAG, "animateChange: new scaleX:" + newHolder.itemView.getScaleX() + ", scaleY:" + newHolder.itemView.getScaleY());
+        if (DEBUG) {
+            Log.d(TAG, "animateChange() called with: oldHolder = [" + oldHolder + "], newHolder = [" + newHolder + "], fromX = [" + fromX + "], fromY = [" + fromY + "], toX = [" + toX + "], toY = [" + toY + "]");
+            Log.d(TAG, "animateChange: old scaleX:" + oldHolder.itemView.getScaleX() + ", scaleY:" + oldHolder.itemView.getScaleY());
+            Log.d(TAG, "animateChange: new scaleX:" + newHolder.itemView.getScaleX() + ", scaleY:" + newHolder.itemView.getScaleY());
+        }
 
         if (oldHolder == newHolder) {
             // Don't know how to run change animations when the same view holder is re-used.
@@ -382,7 +391,9 @@ public class ZoomItemAnimator extends SimpleItemAnimator {
             mChangeAnimations.add(changeInfo.oldHolder);
 
             float toScale = getScaleFromViewCenter(holder, changeInfo.toX);
-            Log.d(TAG, "animateChangeImpl: oldScale:" + oldScale + ", toScale: "+ toScale);
+            if (DEBUG) {
+                Log.d(TAG, "animateChangeImpl: oldScale:" + oldScale + ", toScale: " + toScale);
+            }
             // chanson add scale to move
             oldViewAnim.scaleX(toScale);
             oldViewAnim.scaleY(toScale);
@@ -415,12 +426,16 @@ public class ZoomItemAnimator extends SimpleItemAnimator {
             mChangeAnimations.add(changeInfo.newHolder);
 
             float toScale = getScaleFromViewCenter(newHolder, changeInfo.toX);
-            Log.d(TAG, "animateChangeImpl: newScale:" + newScale + ", toScale: "+ newScale);
+            if (DEBUG) {
+                Log.d(TAG, "animateChangeImpl: newScale:" + newScale + ", toScale: " + newScale);
+            }
 
             float fromScale = oldScale;
             ViewCompat.setScaleX(newView, fromScale);
             ViewCompat.setScaleY(newView, fromScale);
-            Log.d(TAG, "animateChangeImpl: onAnimationStart: fromScale:" + fromScale);
+            if (DEBUG) {
+                Log.d(TAG, "animateChangeImpl: onAnimationStart: fromScale:" + fromScale);
+            }
 
             // chanson add scale to move
             newViewAnimation.scaleX(toScale);
