@@ -39,7 +39,7 @@
         app:layout_constraintLeft_toRightOf="@+id/avatar"
         app:layout_constraintTop_toBottomOf="@+id/name" />
 
-    <android.support.v7.widget.RecyclerView
+    <com.chensiwen.edugame.recyclerview.CardRecyclerView
         android:id="@+id/recycler_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

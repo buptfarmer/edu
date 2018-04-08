@@ -72,71 +72,8 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
     }
 
     private RecordRecyclerAdapter mRecyclerAdapter;
-    private RecyclerView mRecyclerView;
+    private CardRecyclerView mRecyclerView;
     private ArrayList<String> mContentList = new ArrayList<>();
-
-
-    /**
-     * 用户点击的分类在rv的位置
-     */
-    private int mIndex;
-    /**
-     * rv是否需要第二次滚动
-     */
-    private boolean mNeedToMove = false;
-
-    private void moveToPosition(int index) {
-        Log.d(TAG, "moveToPosition() called with: index = [" + index + "]");
-        //获取当前recycleView屏幕可见的第一项和最后一项的Position
-        int firstItem = mLayoutManager.findFirstVisibleItemPosition();
-        int lastItem = mLayoutManager.findLastVisibleItemPosition();
-        //然后区分情况
-        if (index <= firstItem) {
-            //当要置顶的项在当前显示的第一个项的前面时
-            mRecyclerView.scrollToPosition(index);
-        } else if (index <= lastItem) {
-            //当要置顶的项已经在屏幕上显示时，计算它离屏幕原点的距离
-            int top = mRecyclerView.getChildAt(index - firstItem).getTop();
-            mRecyclerView.scrollBy(0, top);
-        } else {
-            //当要置顶的项在当前显示的最后一项的后面时
-            mRecyclerView.scrollToPosition(index);
-            //记录当前需要在RecyclerView滚动监听里面继续第二次滚动
-            mNeedToMove = true;
-        }
-    }
-
-    private interface OnItemScorllChangeListener {
-        void onItemScrollChange(int position);
-    }
-
-    private LinearLayoutManager mLayoutManager;
-    private static final float sScaleFactor = 0.2f;
-
-    /**
-     * 根据view 的位置计算需要缩放的大小。XY 缩放比例一样
-     * @param view
-     * @return
-     */
-    private float getScaleFromViewCenter(View view) {
-        Log.d(TAG, "onScrolled: firstVisibleView:" + view.toString());
-        int viewCenter = view.getLeft() + (view.getRight() - view.getLeft()) / 2;
-        int middle = mRecyclerView.getWidth() / 2;
-        float scaleFactor = sScaleFactor;
-        if (viewCenter < middle) {
-            float scale = 1f * viewCenter / middle * scaleFactor + (1 - scaleFactor); // [0.7, 1]
-            Log.d(TAG, "onScrolled: viewCenter:" + viewCenter + ", middle :" + middle + ", scale:" + scale);
-            view.setScaleX(scale);
-            view.setScaleY(scale);
-            return scale;
-        } else {
-            float scale = 1f * (2 * middle - viewCenter) / middle * scaleFactor + (1 - scaleFactor); // [0.7, 1]
-            Log.d(TAG, "onScrolled: viewCenter:" + viewCenter + ", middle :" + middle + ", scale:" + scale);
-            view.setScaleX(scale);
-            view.setScaleY(scale);
-            return scale;
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -144,162 +81,15 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
         prepareData();
         setContentView(R.layout.activity_horizontal_recycler_view);
 
-        mRecyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
-        mRecyclerView.setLayoutManager(mLayoutManager);
+        mRecyclerView = (CardRecyclerView) findViewById(R.id.recycler_view);
         mRecyclerAdapter = new RecordRecyclerAdapter(this, mRecyclerView, mContentList, mHandler);
         mRecyclerView.setAdapter(mRecyclerAdapter);
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            private int mLastPosition = -1;
+        mRecyclerView.setOnItemScorllChangeListener(new CardRecyclerView.OnItemScorllChangeListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                Log.d(TAG, "onScrollStateChanged() called with: recyclerView = [" + recyclerView + "], newState = [" + newState + "]");
-                if (newState != RecyclerView.SCROLL_STATE_IDLE) {
-                    return;
-                }
-                {
-                    // 松手后自动滑动到中间位置
-                    int position = 0;
-                    Log.d(TAG, "onScrollStateChanged: position:" + position);
-                    View visibleView = mLayoutManager.getChildAt(position);
-                    int viewCenter = visibleView.getLeft() + (visibleView.getRight() - visibleView.getLeft()) / 2;
-                    Log.d(TAG, "onScrollStateChanged: viewCenter:" + viewCenter);
-                    if (viewCenter < 0) {
-                        visibleView = mLayoutManager.getChildAt(position + 1);
-                        viewCenter = (visibleView.getLeft() + visibleView.getRight()) / 2;
-                        Log.d(TAG, "onScrollStateChanged: viewCenter:" + viewCenter);
-                    }
-                    int middle = mRecyclerView.getWidth() / 2;
-                    Log.d(TAG, "onScrollStateChanged: middle:" + middle);
-
-                    int deltaScroll = middle - viewCenter;
-                    int currentScrollX = mRecyclerView.getScrollX();
-                    Log.d(TAG, "onScrollStateChanged: currentScrollX:" + currentScrollX);
-                    mRecyclerView.smoothScrollBy(-deltaScroll, 0);
-                }
-            }
-
-            @Override
-            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
-                super.onScrolled(recyclerView, dx, dy);
-                Log.d(TAG, "onScrolled() called with: recyclerView = [" + recyclerView + "], dx = [" + dx + "], dy = [" + dy + "]");
-                {
-                    // 控制滑动过程中的缩放
-                    int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
-                    int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
-                    for (int i = firstVisibleItemPosition; i <= lastVisibleItemPosition; i++) {
-                        View view = mLayoutManager.findViewByPosition(i);
-                        Log.d(TAG, "onScrolled: firstVisibleView:" + view.toString());
-                        float scale = getScaleFromViewCenter(view);
-                        view.setScaleX(scale);
-                        view.setScaleY(scale);
-                    }
-                }
-
-                {
-                    // 滑动时item 的变化
-                    int start = mLayoutManager.findFirstVisibleItemPosition();
-                    int end = mLayoutManager.findLastVisibleItemPosition();
-                    int offset = 0;
-                    for (int index = 0; index <= end - start; index++) {
-                        View visibleView = mLayoutManager.getChildAt(index);
-                        int viewCenter = visibleView.getLeft() + (visibleView.getRight() - visibleView.getLeft()) / 2;
-                        if (viewCenter > 0) {
-                            offset = index;
-                            break;
-                        }
-                    }
-                    int currentPosition = start + offset;
-                    if (mLastPosition != currentPosition) {
-                        mLastPosition = currentPosition;
-                        Toast.makeText(HorizontalRecyclerViewActivity.this, "lastPosition:" + mLastPosition, Toast.LENGTH_SHORT).show();
-                        Log.d(TAG, "onScrollStateChanged: item changed:"+ mLastPosition);
-                    }
-                }
-
+            public void onItemScrollChange(int position) {
+                Toast.makeText(HorizontalRecyclerViewActivity.this, "lastPosition:" + position, Toast.LENGTH_SHORT).show();
             }
         });
-        mRecyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
-            @Override
-            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
-//                Log.d(TAG, "onInterceptTouchEvent() called with: rv = [" + rv + "], e = [" + e + "]");
-                return false;
-            }
-
-            @Override
-            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
-//                Log.d(TAG, "onTouchEvent() called with: rv = [" + rv + "], e = [" + e + "]");
-            }
-
-            @Override
-            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
-//                Log.d(TAG, "onRequestDisallowInterceptTouchEvent() called with: disallowIntercept = [" + disallowIntercept + "]");
-            }
-        });
-
-        mRecyclerView.setOnFlingListener(new RecyclerView.OnFlingListener() {
-            @Override
-            public boolean onFling(int velocityX, int velocityY) {
-
-                Log.d(TAG, "onFling() called with: velocityX = [" + velocityX + "], velocityY = [" + velocityY + "]" + ", state:" + mRecyclerView.getScrollState());
-                if (mRecyclerView.getScrollState() == SCROLL_STATE_SETTLING) {
-                    Log.d(TAG, "onFling: scroll state:SCROLL_STATE_SETTLING");
-                    return true;
-                }
-                int minFlingVelocity = mRecyclerView.getMinFlingVelocity();
-                if (Math.abs(velocityX) > minFlingVelocity) {
-                    int vel = velocityX > 0 ? Math.min(velocityX, 2500) : Math.max(velocityX, -2500);
-                    Log.d(TAG, "onFling: velocity result:" + vel);
-                    {
-                        if (vel > 0) {
-                            // 手向左滑动，卡片向左滑动，展示下一个右边的卡片
-                            int position = 0;
-                            View visibleView = mLayoutManager.getChildAt(position);
-                            int viewCenter = visibleView.getLeft() + (visibleView.getRight() - visibleView.getLeft()) / 2;
-
-                            int middle = mRecyclerView.getWidth() / 2;
-                            int distance = viewCenter + visibleView.getWidth() - middle;
-                            mRecyclerView.smoothScrollBy(distance, 0);
-                        } else {
-                            // 手向右边滑动，卡片向右边滑动，展示下一个左边的卡片
-
-                            int position = 0;
-                            View visibleView = mLayoutManager.getChildAt(position);
-                            int viewCenter = visibleView.getLeft() + (visibleView.getRight() - visibleView.getLeft()) / 2;
-
-                            int middle = mRecyclerView.getWidth() / 2;
-                            int distance = middle - viewCenter;
-                            mRecyclerView.smoothScrollBy(-distance, 0);
-                        }
-                    }
-                    return true;
-                }
-                return false;
-            }
-        });
-        mRecyclerView.setOnDragListener(new View.OnDragListener() {
-            @Override
-            public boolean onDrag(View v, DragEvent event) {
-                Log.d(TAG, "onDrag() called with: v = [" + v + "], event = [" + event + "]");
-                return false;
-            }
-        });
-//        RecyclerView.ItemAnimator itemAnimator = new ExplodeItemAnimator(this);
-//        itemAnimator.setMoveDuration(1000);
-//        itemAnimator.setChangeDuration(1000);
-//        itemAnimator.setRemoveDuration(1000);
-//        mRecyclerView.setItemAnimator(itemAnimator);
-        long duration = 1000;
-        RecyclerView.ItemAnimator itemAnimator = new ZoomItemAnimator();
-        itemAnimator.setAddDuration(duration);
-        itemAnimator.setChangeDuration(duration);
-        itemAnimator.setRemoveDuration(duration);
-        itemAnimator.setMoveDuration(duration);
-        mRecyclerView.setItemAnimator(itemAnimator);
-
-
-
         // start animation
         boolean showStartAnimation = false;
         if (showStartAnimation) {
