@@ -58,9 +58,12 @@
             android:label="@string/title_activity_rxjava_example"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".recyclerview.HorizontalRecyclerViewActivity" />
-        <activity android:name=".chain.ChainActivity"
-            android:label="@string/title_activity_rxjava_example"
-            />
+        <activity
+            android:name=".chain.ChainActivity"
+            android:label="@string/title_activity_rxjava_example" />
+        <activity
+            android:name=".lottie.LottieActivity"
+            android:label="@string/title_activity_lottie"></activity>
     </application>
 
 </manifest>

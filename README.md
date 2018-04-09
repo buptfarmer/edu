@@ -16,3 +16,5 @@ test commit id hook
 实现效果如下
 
 ![实现效果](https://github.com/buptfarmer/edu/blob/master/docs/images/CardRecyclerView.gif?raw=true)
+
+## BlurEffect

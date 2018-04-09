@@ -11,6 +11,7 @@ import android.view.View;
 
 import com.chensiwen.edugame.chain.ChainActivity;
 import com.chensiwen.edugame.databinding.ActivityEntranceListBinding;
+import com.chensiwen.edugame.lottie.LottieActivity;
 import com.chensiwen.edugame.recyclerview.HorizontalRecyclerViewActivity;
 
 public class EntranceListActivity extends BaseAppCompatActivity {
@@ -33,6 +34,9 @@ public class EntranceListActivity extends BaseAppCompatActivity {
 
         public void onClicChainActivity(View view) {
             startActivity(new Intent(EntranceListActivity.this, ChainActivity.class));
+        }
+        public void onClickLottieActivity(View view) {
+            startActivity(new Intent(EntranceListActivity.this, LottieActivity.class));
         }
     }
 

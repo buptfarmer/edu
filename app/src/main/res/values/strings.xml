@@ -17,4 +17,5 @@
     <string name="title_activity_rxjava_example">RxJavaExample</string>
     <string name="title_activity_horizontal_recycler_view">HorizontalRecyclerView</string>
     <string name="title_activity_chain">ChainActivity</string>
+    <string name="title_activity_lottie">LottieActivity</string>
 </resources>
