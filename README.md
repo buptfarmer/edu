@@ -17,4 +17,8 @@ test commit id hook
 
 ![实现效果](https://github.com/buptfarmer/edu/blob/master/docs/images/CardRecyclerView.gif?raw=true)
 
+## LottieActivity
+使用Lottie库的例子
+![实现效果](https://github.com/buptfarmer/edu/blob/master/docs/images/LottieActivity.gif?raw=true)
+
 ## BlurEffect
