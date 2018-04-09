@@ -9,3 +9,10 @@ for basic config and modules, such as Umeng statics, baidu TTS, animation effect
 for develop new feature, 
 
 test commit id hook
+
+## CardRecyclerView
+基于RecyclerView实现的横向滑动的卡片模式
+一次一动，滑动过程中带缩放动画。
+实现效果如下
+
+![实现效果](https://github.com/buptfarmer/edu/blob/master/docs/images/CardRecyclerView.gif?raw=true)
