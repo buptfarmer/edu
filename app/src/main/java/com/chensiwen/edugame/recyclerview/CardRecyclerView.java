@@ -98,6 +98,15 @@ public class CardRecyclerView extends RecyclerView {
                     Log.d(TAG, "onScrolled() called with: recyclerView = [" + recyclerView + "], dx = [" + dx + "], dy = [" + dy + "]");
                 }
                 {
+                    // calculate scroll percentage
+                    int offset = recyclerView.computeHorizontalScrollOffset();
+                    int extent = recyclerView.computeHorizontalScrollExtent();
+                    int range = recyclerView.computeHorizontalScrollRange();
+
+                    int percentage = (int) (100.0 * offset / (float) (range - extent));
+                    Log.d(TAG, "onScrolled: percentage:" + percentage);
+                }
+                {
                     // 控制滑动过程中的缩放
                     int firstVisibleItemPosition = mLayoutManager.findFirstVisibleItemPosition();
                     int lastVisibleItemPosition = mLayoutManager.findLastVisibleItemPosition();
