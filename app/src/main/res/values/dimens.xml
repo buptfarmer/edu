@@ -4,4 +4,6 @@
     <dimen name="activity_vertical_margin">16dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
     <dimen name="horizontal_card_width">260dp</dimen>
+
+    <dimen name="square_size">50dp</dimen>
 </resources>

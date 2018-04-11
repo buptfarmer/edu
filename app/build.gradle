@@ -48,4 +48,5 @@ dependencies {
         exclude module : 'com.android.support:support-vector-drawable'
     }
     testCompile 'junit:junit:4.12'
+    compile "com.andkulikov:transitionseverywhere:1.7.9"
 }

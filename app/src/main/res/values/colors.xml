@@ -23,4 +23,11 @@
     <color name="common_grey">#9D9D9D</color>
     <color name="common_blue_grey">#5F7C8A</color>
     <color name="common_black">#000000</color>
+
+
+    <color name="primary">#8BC34A</color>
+    <color name="primary_dark">#689F38</color>
+    <color name="accent">#FF5252</color>
+    <color name="primary_text">#212121</color>
+    <color name="second_accent">#FFEB3B</color>
 </resources>

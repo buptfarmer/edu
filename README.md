@@ -22,3 +22,9 @@ test commit id hook
 ![实现效果](https://github.com/buptfarmer/edu/blob/master/docs/images/LottieActivity.gif?raw=true)
 
 ## BlurEffect
+
+## Transitions Everywhere
+***Transitions Everywhere***是一个兼容库，详见[Transitions Everywhere@github](https://github.com/andkulikov/Transitions-Everywhere)
+ 引用并添加sample。 单独的launcher入口。
+ ![实现效果](https://habrastorage.org/files/c51/b1e/b26/c51b1eb26fb941698ad5a1368d06603b.gif)
+ 
