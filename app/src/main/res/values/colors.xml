@@ -30,4 +30,7 @@
     <color name="accent">#FF5252</color>
     <color name="primary_text">#212121</color>
     <color name="second_accent">#FFEB3B</color>
+
+    <color name="bookshelf_scroll_bg">#D8D8D8</color>
+    <color name="bookshelf_scroll_fg">#FFFFFF</color>
 </resources>

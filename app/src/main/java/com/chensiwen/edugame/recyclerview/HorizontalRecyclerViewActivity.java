@@ -5,12 +5,9 @@ import android.os.Looper;
 import android.os.Message;
 import android.os.Bundle;
 import android.support.v7.widget.CardView;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.DragEvent;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -30,8 +27,6 @@ import com.umeng.analytics.MobclickAgent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-
-import static android.support.v7.widget.RecyclerView.SCROLL_STATE_SETTLING;
 
 public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implements Handler.Callback {
     private static final String TAG = "HorizontalRecyclerViewA";
@@ -74,6 +69,7 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
     private RecordRecyclerAdapter mRecyclerAdapter;
     private CardRecyclerView mRecyclerView;
     private ArrayList<String> mContentList = new ArrayList<>();
+    private CardModeScrollBar mCardModeScrollBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +86,24 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
                 Toast.makeText(HorizontalRecyclerViewActivity.this, "lastPosition:" + position, Toast.LENGTH_SHORT).show();
             }
         });
+        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                // calculate scroll percentage
+                int offset = recyclerView.computeHorizontalScrollOffset();
+                int extent = recyclerView.computeHorizontalScrollExtent();
+                int range = recyclerView.computeHorizontalScrollRange();
+                int percentage;
+                if (range - extent <= 0) {
+                    percentage = 0;
+                } else {
+                    percentage = 100 * offset / (range - extent); // [0-100]
+                }
+                mCardModeScrollBar.setPercent(percentage);
+            }
+        });
+        mCardModeScrollBar = (CardModeScrollBar) findViewById(R.id.scroll_bar);
+        mCardModeScrollBar.setItemCount(mContentList.size());
         // start animation
         boolean showStartAnimation = false;
         if (showStartAnimation) {
