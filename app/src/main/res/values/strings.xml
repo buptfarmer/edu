@@ -19,4 +19,5 @@
     <string name="title_activity_horizontal_recycler_view">HorizontalRecyclerView</string>
     <string name="title_activity_chain">ChainActivity</string>
     <string name="title_activity_lottie">LottieActivity</string>
+    <string name="title_activity_main_list">MainListActivity</string>
 </resources>

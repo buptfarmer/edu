@@ -18,18 +18,40 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
+        <activity
+            android:name=".MainListActivity"
+            android:label="@string/title_activity_main_list">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".NumbersActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="com.chensiwen.edugame.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <!-- umeng feedback -->
         <activity
             android:name="com.umeng.fb.ConversationActivity"
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustResize" />
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="com.chensiwen.edugame.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
 
         <!-- Umeng -->
         <meta-data
@@ -44,35 +66,64 @@
             android:label="@string/title_activity_entrance_list"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="com.chensiwen.edugame.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
         <activity
             android:name=".AnimatedVectorDrawableActivity"
             android:label="@string/title_activity_animated_vector_drawable"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="com.chensiwen.edugame.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".RxJavaExampleActivity"
             android:label="@string/title_activity_rxjava_example"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".recyclerview.HorizontalRecyclerViewActivity" />
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+                <action android:name="com.chensiwen.edugame.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".recyclerview.HorizontalRecyclerViewActivity">
+            <intent-filter>
+                <action android:name="com.chensiwen.edugame.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".chain.ChainActivity"
-            android:label="@string/title_activity_rxjava_example" />
+            android:label="@string/title_activity_rxjava_example">
+            <intent-filter>
+                <action android:name="com.chensiwen.edugame.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".lottie.LottieActivity"
-            android:label="@string/title_activity_lottie"></activity>
+            android:label="@string/title_activity_lottie">
+            <intent-filter>
+                <action android:name="com.chensiwen.edugame.MAIN" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".transition.MainActivity"
             android:icon="@drawable/ic_launcher"
-            android:label="@string/app_transition_name" >
+            android:label="@string/app_transition_name">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="com.chensiwen.edugame.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
     </application>
