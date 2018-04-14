@@ -15,8 +15,9 @@
  */
 package com.chensiwen.edugame.recyclerview;
 
+import android.animation.TimeInterpolator;
+import android.animation.ValueAnimator;
 import android.support.annotation.NonNull;
-import android.support.v4.animation.AnimatorCompatHelper;
 import android.support.v4.view.ViewCompat;
 import android.support.v4.view.ViewPropertyAnimatorCompat;
 import android.support.v4.view.ViewPropertyAnimatorListener;
@@ -53,6 +54,7 @@ public class ZoomItemAnimator extends SimpleItemAnimator {
     ArrayList<ViewHolder> mRemoveAnimations = new ArrayList<>();
     ArrayList<ViewHolder> mChangeAnimations = new ArrayList<>();
 
+    private TimeInterpolator mDefaultInterpolator;
     private static class MoveInfo {
         public ViewHolder holder;
         public int fromX, fromY, toX, toY;
@@ -583,8 +585,15 @@ public class ZoomItemAnimator extends SimpleItemAnimator {
     }
 
     private void resetAnimation(ViewHolder holder) {
-        AnimatorCompatHelper.clearInterpolator(holder.itemView);
+        clearInterpolator(holder.itemView);
         endAnimation(holder);
+    }
+
+    public void clearInterpolator(View view) {
+        if (mDefaultInterpolator == null) {
+            mDefaultInterpolator = new ValueAnimator().getInterpolator();
+        }
+        view.animate().setInterpolator(mDefaultInterpolator);
     }
 
     @Override
