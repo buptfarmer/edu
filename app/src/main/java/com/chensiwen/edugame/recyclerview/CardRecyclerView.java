@@ -201,7 +201,7 @@ public class CardRecyclerView extends RecyclerView {
             }
         });
 
-        long duration = 1000;
+        long duration = 350;
         RecyclerView.ItemAnimator itemAnimator = new ZoomItemAnimator();
         itemAnimator.setAddDuration(duration);
         itemAnimator.setChangeDuration(duration);

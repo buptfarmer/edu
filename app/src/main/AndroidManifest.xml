@@ -18,7 +18,6 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
             android:name=".MainListActivity"
             android:label="@string/title_activity_main_list">
@@ -44,8 +43,8 @@
         <activity
             android:name="com.umeng.fb.ConversationActivity"
             android:configChanges="orientation|keyboardHidden"
-            android:screenOrientation="portrait"
             android:label="ConversationActivity"
+            android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>
                 <action android:name="com.chensiwen.edugame.MAIN" />
@@ -92,7 +91,8 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".recyclerview.HorizontalRecyclerViewActivity"
+        <activity
+            android:name=".recyclerview.HorizontalRecyclerViewActivity"
             android:label="@string/title_activity_horizontal_recycler_view">
             <intent-filter>
                 <action android:name="com.chensiwen.edugame.MAIN" />
@@ -122,6 +122,15 @@
             android:name=".transition.MainActivity"
             android:icon="@drawable/ic_launcher"
             android:label="@string/app_transition_name">
+            <intent-filter>
+                <action android:name="com.chensiwen.edugame.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".crossfade.CrossFadeActivity"
+            android:label="@string/title_activity_cross_fade">
+
             <intent-filter>
                 <action android:name="com.chensiwen.edugame.MAIN" />
 

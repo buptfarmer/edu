@@ -20,4 +20,5 @@
     <string name="title_activity_chain">ChainActivity</string>
     <string name="title_activity_lottie">LottieActivity</string>
     <string name="title_activity_main_list">MainListActivity</string>
+    <string name="title_activity_cross_fade">CrossFadeActivity</string>
 </resources>
