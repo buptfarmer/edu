@@ -15,10 +15,17 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"
-        android:src="@mipmap/doudoulong144" />
+        android:src="@drawable/crossfade_back" />
 
     <ImageView
         android:id="@+id/front_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
+        android:src="@drawable/crossfade_front" />
+
+    <ImageView
+        android:id="@+id/current_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="fitXY"

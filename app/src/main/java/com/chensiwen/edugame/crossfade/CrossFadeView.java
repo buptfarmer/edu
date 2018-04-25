@@ -57,4 +57,20 @@ public class CrossFadeView extends FrameLayout {
         mFrontView.setAlpha(frontAlpha);
         mBackView.setAlpha(backAlpha);
     }
+
+    public void setFrontView(Drawable front) {
+        mFrontView.setImageDrawable(front);
+    }
+
+    public void setBackView(Drawable back) {
+        mBackView.setImageDrawable(back);
+    }
+
+    public ImageView getFrontView() {
+        return mFrontView;
+    }
+
+    public ImageView getBackView() {
+        return mBackView;
+    }
 }

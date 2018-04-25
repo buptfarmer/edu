@@ -137,6 +137,24 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity android:name=".crossfade.TripleCrossFadeActivity"
+            android:label="@string/title_activity_cross_fade_triple">
+
+            <intent-filter>
+                <action android:name="com.chensiwen.edugame.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".hsb.HSBActivity"
+            android:label="@string/title_activity_hsb">
+
+            <intent-filter>
+                <action android:name="com.chensiwen.edugame.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
     </application>
 
 </manifest>
