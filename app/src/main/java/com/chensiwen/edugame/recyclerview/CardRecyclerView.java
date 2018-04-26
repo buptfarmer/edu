@@ -247,4 +247,17 @@ public class CardRecyclerView extends RecyclerView {
     public void setOnItemScorllChangeListener(OnItemScorllChangeListener onItemScorllChangeListener) {
         this.onItemScorllChangeListener = onItemScorllChangeListener;
     }
+
+    @Override
+    protected void onMeasure(int widthSpec, int heightSpec) {
+        super.onMeasure(widthSpec, heightSpec);
+
+        int widthMode = MeasureSpec.getMode(widthSpec);
+        int heightMode = MeasureSpec.getMode(heightSpec);
+        int width = MeasureSpec.getSize(widthSpec);
+        int height = MeasureSpec.getSize(heightSpec);
+        Log.d(TAG, "onMeasure() called with: widthMode = [" + widthMode + "], heightMode = [" + heightMode + "]");
+        Log.d(TAG, "onMeasure() called with: width = [" + width + "], height = [" + height + "]");
+        setMeasuredDimension(width, height);
+    }
 }

@@ -221,16 +221,16 @@ public class HorizontalRecyclerViewActivity extends BaseAppCompatActivity implem
             });
 
             // 判断是否是第一个、或者最后一个，增加相应的margin
-            float cardWith = mActivity.getResources().getDimension(R.dimen.horizontal_card_width);
+            float parentWidth = mOwnRecyclerView.getWidth();
             if (position == 0) {
                 ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mRootView.getLayoutParams();
-                layoutParams.leftMargin = (int) (cardWith * 0.2f);
+                layoutParams.leftMargin = (int) (parentWidth * 0.2f);
                 layoutParams.rightMargin = 0;
                 mRootView.setLayoutParams(layoutParams);
             } else if (position == list.size() - 1) {
                 ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mRootView.getLayoutParams();
                 layoutParams.leftMargin = 0;
-                layoutParams.rightMargin = (int) (cardWith * 0.2f);
+                layoutParams.rightMargin = (int) (parentWidth * 0.2f);
                 mRootView.setLayoutParams(layoutParams);
             } else {
                 ViewGroup.MarginLayoutParams layoutParams = (ViewGroup.MarginLayoutParams) mRootView.getLayoutParams();
