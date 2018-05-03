@@ -122,9 +122,12 @@ public class ZoomItemAnimator extends SimpleItemAnimator {
             Runnable mover = new Runnable() {
                 @Override
                 public void run() {
+
+                    int index = 0;
                     for (MoveInfo moveInfo : moves) {
                         animateMoveImpl(moveInfo.holder, moveInfo.fromX, moveInfo.fromY,
-                                moveInfo.toX, moveInfo.toY);
+                                moveInfo.toX, moveInfo.toY, index);
+                        index++;
                     }
                     moves.clear();
                     mMovesList.remove(moves);
@@ -302,7 +305,7 @@ public class ZoomItemAnimator extends SimpleItemAnimator {
         return true;
     }
 
-    void animateMoveImpl(final ViewHolder holder, int fromX, int fromY, int toX, int toY) {
+    void animateMoveImpl(final ViewHolder holder, int fromX, int fromY, int toX, int toY, int index) {
         final View view = holder.itemView;
         final int deltaX = toX - fromX;
         final int deltaY = toY - fromY;
@@ -342,7 +345,9 @@ public class ZoomItemAnimator extends SimpleItemAnimator {
                 mMoveAnimations.remove(holder);
                 dispatchFinishedWhenDone();
             }
-        }).start();
+        })
+                .setStartDelay(index * 20)
+                .start();
     }
 
     @Override
