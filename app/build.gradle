@@ -49,4 +49,5 @@ dependencies {
     }
     testCompile 'junit:junit:4.12'
     compile "com.andkulikov:transitionseverywhere:1.7.9"
+    compile 'com.binaryfork:spanny:1.0.4'
 }
