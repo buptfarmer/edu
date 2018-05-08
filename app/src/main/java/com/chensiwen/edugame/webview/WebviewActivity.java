@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.WebResourceError;
 import android.webkit.WebResourceRequest;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
@@ -15,16 +16,26 @@ import com.chensiwen.edugame.R;
 public class WebviewActivity extends AppCompatActivity {
     private static final String TAG = "WebviewActivity";
     private WebView webView;
-//    private String url = "http://owl.shuqiread.com/?appfunction=an_bmk,1_clo,1_smjs,1&soft_id=1&ver=171116&preVer=&appVer=10.6.3.58&platform=an&placeid=8593&imei=865790024354920&mac=&sdk=22&wh=1080x1920&imsi=null&msv=3&enc=635121525686799675&sn=259098729838&vc=a9cb&mod=YQ601&manufacturer=smartisan&brand=SMARTISAN&net_type=wifi&first_placeid=src8593&aak=0de7ac&user_id=875892007&utype=pre_vip&net=4&net_env=4&coreType=0&rom=5.1.1&skinId=999&skinVersion=1.0&skinVersionPrefix=1&utdid=Vmlpc0Z3cGh4NGdEQUhsaHlvQ2VMUGRx&writer_switch=1&sq_pg_param=owlst#!/class_id/19";
-    private String url = "http://owl.shuqiread.com/?sq_pg_param=owlst#!/class_id/20";
+    private String url = "http://owl.shuqiread.com/?appfunction=an_bmk,1_clo,1_smjs,1&soft_id=1&ver=171116&preVer=&appVer=10.6.3.58&platform=an&placeid=8593&imei=865790024354920&mac=&sdk=22&wh=1080x1920&imsi=null&msv=3&enc=635121525686799675&sn=259098729838&vc=a9cb&mod=YQ601&manufacturer=smartisan&brand=SMARTISAN&net_type=wifi&first_placeid=src8593&aak=0de7ac&user_id=875892007&utype=pre_vip&net=4&net_env=4&coreType=0&rom=5.1.1&skinId=999&skinVersion=1.0&skinVersionPrefix=1&utdid=Vmlpc0Z3cGh4NGdEQUhsaHlvQ2VMUGRx&writer_switch=1&sq_pg_param=owlst#!/class_id/19";
+//    private String url = "http://owl.shuqiread.com/?sq_pg_param=owlst#!/class_id/20";
 //    private String url = "http://www.baidu.com";
+//    private String url = "http://30.77.46.104:8080/";
+//    private String url = "http://39.104.170.137:9898/m9util";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
         webView = (WebView) findViewById(R.id.webview);
-        webView.getSettings().setJavaScriptEnabled(true);
+        WebSettings websettings = webView.getSettings();
+        websettings.setJavaScriptEnabled(true);
+        websettings.setDomStorageEnabled(true);  // 开启 DOM storage 功能
+        websettings.setAppCacheMaxSize(1024*1024*8);
+        String appCachePath = getApplicationContext().getCacheDir().getAbsolutePath();
+        websettings.setAppCachePath(appCachePath);
+        websettings.setAllowFileAccess(true);    // 可以读取文件缓存
+        websettings.setAppCacheEnabled(true);
+
         webView.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest request) {
