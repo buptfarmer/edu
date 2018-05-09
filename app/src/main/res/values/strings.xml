@@ -24,5 +24,7 @@
     <string name="title_activity_cross_fade_triple">TripleCrossFadeActivity</string>
     <string name="title_activity_hsb">HSBActivity</string>
     <string name="title_activity_bold_text">BoldTextActivity</string>
+    <string name="title_activity_horizontal_over_scroll_recycler_view">OverScrollHorizontalRecyclerView</string>
     <string name="title_activity_webview">WebviewActivity</string>
+    <string name="title_activity_align_text">AlignTextActivity</string>
 </resources>
