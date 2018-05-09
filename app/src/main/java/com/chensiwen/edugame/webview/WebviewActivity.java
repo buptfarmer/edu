@@ -27,6 +27,7 @@ public class WebviewActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_webview);
         webView = (WebView) findViewById(R.id.webview);
+//        webView.setLayerType(View.LAYER_TYPE_SOFTWARE, null);
         WebSettings websettings = webView.getSettings();
         websettings.setJavaScriptEnabled(true);
         websettings.setDomStorageEnabled(true);  // 开启 DOM storage 功能
