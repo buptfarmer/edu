@@ -27,4 +27,7 @@
     <string name="title_activity_horizontal_over_scroll_recycler_view">OverScrollHorizontalRecyclerView</string>
     <string name="title_activity_webview">WebviewActivity</string>
     <string name="title_activity_align_text">AlignTextActivity</string>
+    <string name="title_activity_fullscreen_test">FullscreenTestActivity</string>
+    <string name="title_activity_test_crash">TestCrashActivity</string>
+    <string name="title_activity_test_thread">TestThreadActivity</string>
 </resources>

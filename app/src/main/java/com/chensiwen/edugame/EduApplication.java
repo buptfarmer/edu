@@ -1,13 +1,19 @@
 package com.chensiwen.edugame;
 
 import android.app.Application;
+import android.app.job.JobInfo;
+import android.app.job.JobScheduler;
+import android.content.ComponentName;
 import android.os.Environment;
 import android.util.Log;
 
 import com.baidu.tts.answer.auth.AuthInfo;
 import com.baidu.tts.client.SpeechSynthesizer;
 import com.baidu.tts.client.TtsMode;
+import com.chensiwen.edugame.job.MyJobService;
 import com.umeng.analytics.MobclickAgent;
+
+import org.aspectj.lang.annotation.Aspect;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -35,6 +41,7 @@ public class EduApplication extends Application {
     private static final String ENGLISH_TEXT_MODEL_NAME = "bd_etts_text_en.dat";
     private static SpeechSynthesizer sSpeechSynthesizer;
 
+    public static final int MY_JOB_ID = 111;
     @Override
     public void onCreate() {
         super.onCreate();
@@ -45,9 +52,26 @@ public class EduApplication extends Application {
         }
         initialEnv();
         initialTts();
+        initJobs();
 
     }
 
+    private void initJobs() {
+        Log.d("CCCC", "initJobs() called");
+        JobScheduler jobScheduler = null;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP) {
+            jobScheduler = (JobScheduler) getSystemService(JOB_SCHEDULER_SERVICE);
+            ComponentName jobService = new ComponentName(getPackageName(),
+                    MyJobService.class.getName());
+            JobInfo jobInfo = new JobInfo.Builder(MY_JOB_ID, jobService)
+                    .setRequiredNetworkType(JobInfo.NETWORK_TYPE_ANY)
+                    .setPeriodic(60* 1000)
+                    .setPersisted(true)
+//                    .setExtras(bundle)
+                    .build();
+            jobScheduler.schedule(jobInfo);
+        }
+    }
 
     private void initialEnv() {
         if (mSampleDirPath == null) {

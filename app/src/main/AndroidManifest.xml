@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.MODIFY_AUDIO_SETTINGS" />
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_SETTINGS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -128,62 +129,162 @@
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".crossfade.CrossFadeActivity"
+        <activity
+            android:name=".crossfade.CrossFadeActivity"
             android:label="@string/title_activity_cross_fade">
-
             <intent-filter>
                 <action android:name="com.chensiwen.edugame.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".crossfade.TripleCrossFadeActivity"
+        <activity
+            android:name=".crossfade.TripleCrossFadeActivity"
             android:label="@string/title_activity_cross_fade_triple">
-
             <intent-filter>
                 <action android:name="com.chensiwen.edugame.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".hsb.HSBActivity"
+        <activity
+            android:name=".hsb.HSBActivity"
             android:label="@string/title_activity_hsb">
-
             <intent-filter>
                 <action android:name="com.chensiwen.edugame.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".bold.BoldTextActivity"
+        <activity
+            android:name=".bold.BoldTextActivity"
+            android:exported="true"
             android:label="@string/title_activity_bold_text">
+            <intent-filter>
+                <action android:name="com.chensiwen.edugame.MAIN" />
 
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
+            <!-- 文件管理器打开 -->
+            <!-- 可以打开epub书籍 -->
+
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:scheme="file" />
+                <data android:mimeType="text/plain" />
+                <data android:mimeType="application/epub+zip" />
+                <data android:mimeType="application/umd" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="file" />
+                <data android:host="*" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.umd" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="file" />
+                <data android:host="*" />
+                <data android:mimeType="*/*" />
+                <data android:pathPattern=".*\\.epub" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".recyclerview.HorizontalOverScrollRecyclerViewActivity"
+            android:label="@string/title_activity_horizontal_over_scroll_recycler_view">
             <intent-filter>
                 <action android:name="com.chensiwen.edugame.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-        <activity android:name=".webview.WebviewActivity"
+        <activity
+            android:name=".webview.WebviewActivity"
             android:label="@string/title_activity_webview">
-
             <intent-filter>
                 <action android:name="com.chensiwen.edugame.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".bold.AlignTextActivity"
+        <activity
+            android:name=".bold.AlignTextActivity"
             android:exported="true"
             android:label="@string/title_activity_align_text">
-
             <intent-filter>
                 <action android:name="com.chensiwen.edugame.MAIN" />
 
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".FullscreenTestActivity"
+            android:configChanges="orientation|keyboardHidden|navigation|screenSize|smallestScreenSize|screenLayout"
+            android:exported="true"
+            android:label="@string/title_activity_fullscreen_test">
+            <intent-filter>
+                <action android:name="com.chensiwen.edugame.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TestCrashActivity"
+            android:label="@string/title_activity_test_crash">
+            <intent-filter>
+                <action android:name="com.chensiwen.edugame.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".TestThreadActivity"
+            android:label="@string/title_activity_test_thread">
+            <intent-filter>
+                <action android:name="com.chensiwen.edugame.MAIN" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+        </activity>
+
+        <receiver
+            android:name=".receiver.NetChangeReceiver"
+            android:enabled="true"
+            android:process=":test"
+            android:exported="true">
+
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.TIME_SET" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.TIMEZONE_CHANGED" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="com.test.NET_CHANGE" />
+            </intent-filter>
+        </receiver>
+        <service android:name=".job.MyJobService"
+            android:enabled="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"/>
     </application>
 
 </manifest>

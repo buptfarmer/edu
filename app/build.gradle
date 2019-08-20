@@ -1,11 +1,20 @@
 apply plugin: 'com.android.application'
+//apply plugin: 'android-aspectjx'
+////更详细的使用作者在readme中已经举例写得很明白了，可以自行参考上面的链接
+//aspectjx {
+//    //加入需要织入代码的第三方库
+////    includeJarFilter '...xxx', '...xxx'
+//
+//    //排除不需要织入代码的第三方库
+////    excludeJarFilter '...xxx'
+//}
 
 ext {
-    supportLibVersion = '26.0.0'
+    supportLibVersion = '28.0.0'
 }
 android {
-    compileSdkVersion 26
-    buildToolsVersion "26.0.0"
+    compileSdkVersion 28
+    buildToolsVersion "28.0.3"
 
     defaultConfig {
         applicationId "com.chensiwen.edugame"
@@ -14,6 +23,11 @@ android {
         versionCode 1
         versionName "1.0"
         vectorDrawables.useSupportLibrary = true
+        ndk {
+            moduleName "JNISample"
+
+        }
+        multiDexEnabled true
     }
     dataBinding {
         enabled = true
@@ -24,12 +38,21 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-}
+    lintOptions {
+        abortOnError false
+    }
 
+//    dexOptions {
+//        javaMaxHeapSize "4g"
+//        preDexLibraries = false
+//    }
+}
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     compile files('libs/com.umeng.fb.5.2.0.jar')
+//    compile(name:'lintaar-debug', ext:'aar')
 
+    compile 'org.aspectj:aspectjrt:1.8.9'
     compile files('libs/com.baidu.tts_2.2.6.20160505_a2af8d6_beta.jar')
     compile files('libs/galaxy-v2.0.jar')
     compile "com.android.support:appcompat-v7:${supportLibVersion}"
@@ -50,4 +73,52 @@ dependencies {
     testCompile 'junit:junit:4.12'
     compile "com.andkulikov:transitionseverywhere:1.7.9"
     compile 'com.binaryfork:spanny:1.0.4'
+}
+
+//tasks.whenTaskAdded { theTask ->
+//    println("cccc====> theTask.name:"+ theTask.name + "   " + theTask.group)
+//    if(theTask.name.equalsIgnoreCase("mergeDebugAssets")){
+//        theTask.doFirst {
+//            modifyAssetsConfig(1)
+//        }
+//    }
+//
+//    if(theTask.name.equalsIgnoreCase("mergeReleaseAssets")){
+//        theTask.doFirst {
+//            modifyAssetsConfig(0)
+//        }
+//    }
+//
+//    if(theTask.name.equalsIgnoreCase("mergeYufaAssets")){
+//        theTask.doFirst {
+//            modifyAssetsConfig(2)
+//        }
+//    }
+//}
+def modifyAssetsConfig(int type) {
+    def assetDir = new File(project.projectDir.absolutePath + "/src/main/assets")
+
+    def configText = new File(assetDir.absolutePath + "/channel.json")
+
+    String jsonStr = "";
+    if (type == 1) {//测试
+        jsonStr = "{\n" +
+                "  \"_comment\": \"渠道防止覆盖placeId 文件,anti_replace_file 的内容 `placeid = 8765`\",\n" +
+                "  \"antiReplaceFileList\": [\n" +
+                "    \"/data/etc/appchannel/shuqi_anti_replace_file\",\n" +
+                "    \"/data/etc/appchannel/shuqi/anti_replace_file\",\n" +
+                "    \"/etc/appchannel/shuqi_anti_replace_file\",\n" +
+                "    \"/system/etc/appchannel/shuqi_anti_replace_file\",\n" +
+                "    \"/system/etc/shuqi_anti_replace_file\",\n" +
+                "    \"/system/etc/appchannel/sqchannel.txt\",\n" +
+                "    \"/system/etc/sqchannel.txt\"\n" +
+                "  ]\n" +
+                "}";
+    } else if (type == 0) {//正式
+        jsonStr = "{str2}";
+    } else if (type == 2) {//预发
+        jsonStr = "{str3}";
+    }
+    println("type:" + type)
+    configText.setText(jsonStr, "utf-8")
 }

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context=".TestCrashActivity">
+
+    <TextView
+        android:id="@+id/interrupt"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/accent"
+        android:padding="20dp"
+        android:text="interrupt"
+        android:textSize="30dp" />
+
+    <TextView
+        android:id="@+id/anr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/accent"
+        android:padding="20dp"
+        android:text="ANR"
+        android:textSize="30dp" />
+    <TextView
+        android:id="@+id/get_state"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/accent"
+        android:padding="20dp"
+        android:text="get_state"
+        android:textSize="30dp" />
+</LinearLayout>
